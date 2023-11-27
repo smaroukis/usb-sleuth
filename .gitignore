@@ -2,3 +2,7 @@
 38-04-usb-tester.kicad_sch-bak
 ~38-04-usb-tester.kicad_sch.lck
 fp-info-cache
+fp-lib-table
+.gitignore
+src/.DS_Store
+.gitignore
