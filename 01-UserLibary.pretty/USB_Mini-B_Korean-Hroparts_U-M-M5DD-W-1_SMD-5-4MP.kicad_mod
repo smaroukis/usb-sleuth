@@ -35,8 +35,6 @@
     (stroke (width 0.12) (type default)) (layer "F.SilkS") (tstamp 85b2358f-3e48-45a8-bce1-87270f443e87))
   (fp_line (start -7.31 -4.93) (end -7.31 5.16)
     (stroke (width 0.12) (type default)) (layer "Dwgs.User") (tstamp 61a6c399-decb-47d4-b3e4-08a24a5a019a))
-  (fp_line (start 1.015 0) (end 0.965 0)
-    (stroke (width 0.02) (type default)) (layer "Margin") (tstamp ece122a8-3951-4baa-8846-d98b3bc5c44b))
   (fp_rect (start 1.51 -4.81) (end -9.14 4.83)
     (stroke (width 0.05) (type default)) (fill none) (layer "F.CrtYd") (tstamp 25c65a84-aa51-4ddc-a3f8-b44a3ef28d88))
   (fp_line (start -8.805 -3.65) (end -8.805 3.66)
@@ -47,8 +45,6 @@
     (stroke (width 0.1) (type default)) (layer "F.Fab") (tstamp 3857888e-d65f-4544-8b68-4cdb878d2c13))
   (fp_line (start 0.995 -3.65) (end -8.805 -3.65)
     (stroke (width 0.1) (type default)) (layer "F.Fab") (tstamp 3be7b88c-a0e1-4c21-ba57-e35fd5909c80))
-  (fp_line (start 0.995 -3.65) (end 0.995 3.65)
-    (stroke (width 0.02) (type default)) (layer "User.2") (tstamp b4b379ac-ba34-4ed2-aaf8-d323d665063f))
   (pad "1" smd rect (at 0 -1.6) (size 2 0.5) (layers "F.Cu" "F.Paste" "F.Mask")
     (thermal_bridge_angle 45) (tstamp 646343f8-39d1-4ff0-af61-a636bb4d4626))
   (pad "2" smd rect (at 0 -0.8) (size 2 0.5) (layers "F.Cu" "F.Paste" "F.Mask")
@@ -67,10 +63,4 @@
     (thermal_bridge_angle 45) (tstamp 78d6ad14-c1a7-402e-bab6-f5c02837211f))
   (pad "6" thru_hole oval (at -0.2 3.65) (size 2.8 1.7) (drill oval 1.8 0.7) (layers "*.Cu" "*.Mask")
     (thermal_bridge_angle 45) (tstamp d7422e43-a12b-4e28-86db-d2945335bfa7))
-  (group "" (id aec2f0f3-3099-4cab-9dc2-68459e58c7d1)
-    (members
-      b4b379ac-ba34-4ed2-aaf8-d323d665063f
-      ece122a8-3951-4baa-8846-d98b3bc5c44b
-    )
-  )
 )

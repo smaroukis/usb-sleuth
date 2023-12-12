@@ -55,7 +55,9 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "clearance|183607992|133105992|8a8d98b5-34f5-4c83-8843-cd6f68b290f7|e13f3b96-ac52-4d8b-b270-440bbf39d42c"
+      ],
       "meta": {
         "version": 2
       },
@@ -439,7 +441,7 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.127,
-        "via_diameter": 0.5,
+        "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
       },
