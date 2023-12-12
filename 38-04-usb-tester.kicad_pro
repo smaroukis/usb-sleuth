@@ -89,6 +89,7 @@
         "silk_edge_clearance|191549230|136658000|70916066-bc00-46fc-9812-3af0983159ad|495fee34-9d58-46f8-afaa-a53c3322380a",
         "silk_edge_clearance|194832910|89668000|70916066-bc00-46fc-9812-3af0983159ad|5a253188-ed70-42b3-b53d-53afa87d144a",
         "silk_edge_clearance|194964460|131058000|70916066-bc00-46fc-9812-3af0983159ad|2dde5043-249b-4ff5-a78c-dbd83cc0ce0c",
+        "starved_thermal|146715000|94996000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|b7e947b9-a02d-4443-b690-b95d1eb511cd|F.Cu",
         "starved_thermal|151795000|108872000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|6aee37c9-3827-4928-9a1d-db5f9f0ba1b7|F.Cu"
       ],
       "meta": {
@@ -210,6 +211,7 @@
         0.0,
         0.15,
         0.2,
+        0.3,
         0.4,
         0.6
       ],
