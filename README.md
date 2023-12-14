@@ -215,3 +215,8 @@ Since the ID pin is supposed to be tied to its ground pin within the plug, we ju
 
 ### Attributions
 - tip icon https://thenounproject.com/icon/tip-6063021/
+
+Inspirations
+- https://github.com/petl/USB-C-cable-tester-C2C-caberQU
+- https://github.com/alvarop/usb_c_cable_tester
+- https://github.com/aroerina/LimePulse_USB_cable_checker/tree/master - mostly ripped off the design from this one, heh -- although I will open source my firmware.
