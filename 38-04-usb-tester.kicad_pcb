@@ -378,7 +378,7 @@
       (net 85 "/B_SHIELD") (pinfunction "1") (pintype "input") (tstamp 8e849c7a-1d29-43ad-8a09-5b4c9f904f54))
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 0ba3b118-1612-4221-9a93-6da456da7f57)
     (at 196.9 133.858 90)
     (property "Description" "B_CC1")
@@ -581,7 +581,7 @@
     )
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 18a993f1-44fd-4466-a42b-533b60c7ae63)
     (at 113.03 133.858 -90)
     (property "Description" "A_CC1")
@@ -660,7 +660,7 @@
       ) (tstamp 43a9b3c4-73ab-477b-aacd-4a65b995cb4b))
   )
 
-  (footprint "01-UserLibary:USB_C_Receptacle_Amphenol_12401832E402A" (layer "F.Cu")
+  (footprint "01-UserFootprints:USB_C_Receptacle_Amphenol_12401832E402A" (layer "F.Cu")
     (tstamp 2b0c018c-e085-4141-b0cb-bc35caeb287e)
     (at 116.586 102.568 -90)
     (descr "USB TYPE C, RA RCPT PCB, SMT, https://jlcpcb.com/partdetail/AmphenolIcc-12401832E402A/C464604")
@@ -790,7 +790,7 @@
     )
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 2d8a566e-6b10-49cc-be32-e0e79671a8e5)
     (at 196.95 86.868 90)
     (property "Description" "B_GND")
@@ -1162,7 +1162,7 @@
     )
   )
 
-  (footprint "01-UserLibary:USB_C_Receptacle_Amphenol_12401832E402A" (layer "F.Cu")
+  (footprint "01-UserFootprints:USB_C_Receptacle_Amphenol_12401832E402A" (layer "F.Cu")
     (tstamp 40cb2045-8cf4-484a-953c-b095ebe13220)
     (at 191.07 96.52 90)
     (descr "USB TYPE C, RA RCPT PCB, SMT, https://jlcpcb.com/partdetail/AmphenolIcc-12401832E402A/C464604")
@@ -1457,7 +1457,7 @@
     )
   )
 
-  (footprint "01-UserLibary:USB_Mini-B_Korean-Hroparts_U-M-M5DD-W-1_SMD-5-4MP" (layer "F.Cu")
+  (footprint "01-UserFootprints:USB_Mini-B_Korean-Hroparts_U-M-M5DD-W-1_SMD-5-4MP" (layer "F.Cu")
     (tstamp 495f81ac-32a2-43a9-8153-4a67c3c8eb43)
     (at 191.78 110.351 180)
     (property "Description" "USB-B-Mini")
@@ -1908,7 +1908,7 @@
     )
   )
 
-  (footprint "01-UserLibary:USB_Micro-B_Kinghelm-KH-MICRO5P-JN" (layer "F.Cu")
+  (footprint "01-UserFootprints:USB_Micro-B_Kinghelm-KH-MICRO5P-JN" (layer "F.Cu")
     (tstamp 590dcd3e-75e6-4889-86a2-b53581808a70)
     (at 195.304 121.666 90)
     (descr "Micro USB B Receptacel (https://jlcpcb.com/partdetail/Shenzhen_KinghelmElec-KH_MICRO5PJN/C962222)")
@@ -2203,7 +2203,7 @@
     )
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 60662fb0-c87c-4793-ad98-61944c3d991a)
     (at 191.308 139.954 90)
     (property "Description" "B_CC2")
@@ -2468,7 +2468,7 @@
     )
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 6698099e-e174-4815-aa9a-db58ba237396)
     (at 118.524 139.954 -90)
     (property "Description" "A_CC2")
@@ -2946,7 +2946,7 @@
     )
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 84c8e3f3-b8d9-45b1-b3bb-ac07647a4a49)
     (at 112.836 86.868 -90)
     (property "Description" "A_GND")
@@ -3213,7 +3213,7 @@
     )
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp 99a2fc93-6551-4588-a568-a37c01324b00)
     (at 118.524 80.518 -90)
     (property "Description" "A_VBUS")
@@ -3551,7 +3551,7 @@
     )
   )
 
-  (footprint "01-UserLibary:SW-DIP-4P_P1.27mm_SMD-2x4" (layer "F.Cu")
+  (footprint "01-UserFootprints:SW-DIP-4P_P1.27mm_SMD-2x4" (layer "F.Cu")
     (tstamp b7995fd9-436d-45f7-9bb3-bb0b888d542e)
     (at 172.339 133.604)
     (property "Description" "SW - Isolator")
@@ -4049,7 +4049,7 @@
     (pad "" np_thru_hole circle locked (at 0 0) (size 3.2 3.2) (drill 3.2) (layers "F&B.Cu" "*.Mask") (tstamp f516e439-619c-4200-9b23-d48a52bf9f66))
   )
 
-  (footprint "01-UserLibary:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
+  (footprint "01-UserFootprints:Connector_Pad_Edge_Oval_5mm_Extended" (layer "F.Cu")
     (tstamp cde8d80f-a4f0-41ee-9f3d-2efb91602082)
     (at 191.258 80.518 90)
     (property "Description" "B_VBUS")
@@ -4435,7 +4435,7 @@
       (net 22 "/A_DRAIN") (pinfunction "1") (pintype "input") (tstamp cd8a2969-b43e-4f05-9fe0-4ceb9c4cf2f4))
   )
 
-  (footprint "01-UserLibary:USB3_A_Hong-Cheng_HC-USB3.0-L168-WP_THT-9-2MP_P2.0mm" locked (layer "F.Cu")
+  (footprint "01-UserFootprints:USB3_A_Hong-Cheng_HC-USB3.0-L168-WP_THT-9-2MP_P2.0mm" locked (layer "F.Cu")
     (tstamp e12f25d9-53bf-4cf3-91dd-468bfd5f8880)
     (at 123.488 117.078 -90)
     (property "Description" "USB-A-3.0")
