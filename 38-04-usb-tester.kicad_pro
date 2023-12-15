@@ -55,12 +55,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "hole_clearance|120946000|99606500|c0ef9f53-ee97-42ab-825e-1ad6a02ef0cf|32a35c83-0f94-48fc-aea5-385a3cf4e725",
-        "lib_footprint_mismatch|116488965|117098000|e12f25d9-53bf-4cf3-91dd-468bfd5f8880|00000000-0000-0000-0000-000000000000",
-        "starved_thermal|146715000|94996000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|b7e947b9-a02d-4443-b690-b95d1eb511cd|F.Cu",
-        "starved_thermal|151795000|108872000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|6aee37c9-3827-4928-9a1d-db5f9f0ba1b7|F.Cu"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -77,7 +72,7 @@
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "footprint": "error",
-        "footprint_type_mismatch": "ignore",
+        "footprint_type_mismatch": "warning",
         "hole_clearance": "error",
         "hole_near_hole": "error",
         "invalid_outline": "error",
@@ -92,9 +87,9 @@
         "missing_courtyard": "ignore",
         "missing_footprint": "warning",
         "net_conflict": "warning",
-        "npth_inside_courtyard": "ignore",
+        "npth_inside_courtyard": "warning",
         "padstack": "warning",
-        "pth_inside_courtyard": "ignore",
+        "pth_inside_courtyard": "warning",
         "shorting_items": "error",
         "silk_edge_clearance": "ignore",
         "silk_over_copper": "warning",
@@ -133,7 +128,7 @@
         "min_via_diameter": 0.5,
         "solder_mask_clearance": 0.0,
         "solder_mask_min_width": 0.0,
-        "solder_mask_to_copper_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0.049999999999999996,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [
