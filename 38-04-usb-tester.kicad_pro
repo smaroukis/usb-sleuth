@@ -55,7 +55,13 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "lib_footprint_mismatch|116488965|117098000|e12f25d9-53bf-4cf3-91dd-468bfd5f8880|00000000-0000-0000-0000-000000000000",
+        "starved_thermal|146715000|94996000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|b7e947b9-a02d-4443-b690-b95d1eb511cd|F.Cu",
+        "starved_thermal|151795000|108872000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|6aee37c9-3827-4928-9a1d-db5f9f0ba1b7|F.Cu",
+        "starved_thermal|151795000|94996000|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|f53b4bc4-95f5-4069-8cfc-6d492485f97d|F.Cu",
+        "starved_thermal|179753200|117652800|6db9d8f1-dad1-4e3e-b06e-93b2c78d9648|58303684-ea2f-4644-8d45-0e093b8cad1c|F.Cu"
+      ],
       "meta": {
         "version": 2
       },
@@ -128,7 +134,7 @@
         "min_via_diameter": 0.5,
         "solder_mask_clearance": 0.0,
         "solder_mask_min_width": 0.0,
-        "solder_mask_to_copper_clearance": 0.049999999999999996,
+        "solder_mask_to_copper_clearance": 0.005,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [
@@ -486,7 +492,7 @@
     "last_paths": {
       "gencad": "",
       "idf": "",
-      "netlist": "",
+      "netlist": "../../../../Applications/KiCad/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
