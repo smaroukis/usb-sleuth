@@ -1,10 +1,10 @@
-## Overview
+parent::[p-usb-sleuth-🕵️](p-usb-sleuth-%F0%9F%95%B5%EF%B8%8F.md)
+
+# Overview
 
 The device tests for continuity within USB cables for USB 2.0, 3.0, and 3.1 pinouts. A STM32C031K6T microcontroller is used for testing connection and orientation of certain pins, and others are simple continuity tests.
 
 This USB cable tester has the "B" side on the right, and the "A" side on the left.
-
-![](attachments/aa92aea4563fe3d880b4fa6b19c98a5f.png)
 
 ![](attachments/7ca73ec73e6ef657711e2b53d82c85f6.png)
 
@@ -17,16 +17,19 @@ The device has some benefits over a simple continuity tester
 > [!CAUTION] 
 > Note for correct continuity testing of the USB3.1 pins, the cable should be in the CC orientation of either `STD>STD` or `FLIP>FLIP`. See on-board LEDs for configuration.
 
-Layout
-- Various B side pins are biased to VBUS through pullup resistors. A side pins are either connected to ground through an LED, thus lighting up if the corresponding wire is continuous, or the pins are connected into the MCU for inputs. These pins are shown below. 
+## General Layout and Operation
 
-Pins that the MCU tests for
+Layout
+- Various B side pins are biased to VBUS through pullup resistors. A side pins are either connected to ground through an LED, thus lighting up if the corresponding wire is continuous, or the pins are connected into the MCU for inputs. These pins that the MCU tests for are as follows:
 - Ground (note all four GND pins are tied together)
-- Vbus (note all four VBUS pins are tied together)
+- V_bus (note all four VBUS pins are tied together)
 - CC1 to test for CC line
 - CC2 to test for VCONN line and pull down resistor for active cables, as well as a flipped CC cable
 
 > Note: Both A-side and B-side CC1 and CC2 pins are tapped off into corresponding control inputs to the MCU through a resistor, allowing for pulling the control pins high or low to sense the result on the opposite side.
+
+Simplified layout of testing CC1 pin.
+![](attachments/fd46faa0f7ca6710911e1b0df0ea281a.jpg)
 
 ## Programming and Reset
 
@@ -40,13 +43,16 @@ The device can also be reset by shorting out the `nRESET` line to `GND` (pins 1 
 > [!NOTE]
 > For the `SWD` pins we need pullup or pulldown resistors on `SWDIO` and `SDCLK` respectively. These are provided internally by the STM32 MCU, but if there is an issue with the debugger try adding an external weak pulllup and pulldown (10K-100K).
 
-## Testing VBUS and GND 
+# Detailed Description of Operation
+
+## Sensing VBUS and GND 
 
 All VBUS pins are tied together and tested via a pulldown resistor on the MCU. 
 
-B side feeds A side
+B-side receptacle pins are pulled up to VDD through resistors. 
 ![](attachments/23046ae691bb28dd70a94b5c6b8f0091.png)
 
+A-side receptacle pins are 
 ![](attachments/d96cb615de5e9da57af79df1d971963b.png)
 
 This passes through a isolation switch
@@ -65,11 +71,11 @@ Output LEDs are driven by the MCU outputs `GND_LED` and `VBUS_LED`
 > [!NOTE]
 > This is why the "stronger" 2K pullup is needed, to only drop a voltage of VCCx2/(2+10), which is negligible in the digital logic sense→ [Pullup Resistors](Pullup%20Resistors.md)
 
-## Testing CC Orientation for USB-C
+## Sensing CC Orientation for USB-C
 
-USB 2.0 Type-C Plug Pin-Out
+Here is the type-C receptacle pinout 
 ![](attachments/6c7a202aad09ab28bc2ce7d4dda5e6cc.png)
-> Source: https://ww1.microchip.com/downloads/en/appnotes/00001953a.pdf
+> Source: "USB 2.0 Type-C Plug Pin-Out" https://ww1.microchip.com/downloads/en/appnotes/00001953a.pdf
 
 Possible orientations of USB-C Plug.
 ![ 200](IMG_6318.jpg%20)
@@ -85,54 +91,9 @@ Testing Procedure
 	4. If neither are `HIGH` we are connected to `VCONN`, so apply test voltage to `A_CC2`
 2. Apply test voltage to `A_CC2`:
 	1. (same as above but pins swapped)
+ 
 
-
-## DMM Testing of  Rp on CC line
-
-> [!Caution]
-> Verify the following:
-> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding.
-> 2. All DIP switches are in the OFF position
-> 3. Power switch is in the OFF position
-
-For the Type-A to C cable the USB standard specifies at 56K pullup resistor between `VBUS` and `CC` (since the A side is the host, CC pin needs to be pulled up for the B-side/peripheral to recognize A side as host). 
-
-We can test the exact value of this resistor by using a DMM between `B_VBUS` and `B_CC1` testing pads.
-
-![](attachments/e3cffc83784986d4a272780f084790a6.jpg)
-
-![](attachments/beb8976630d9035289f34051b11eb72b.png)
-
-## DMM Testing of Rd
-
-> [!Caution]
-> Verify the following:
-> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding.
-> 2. All DIP switches are in the OFF position
-> 3. Power switch is in the OFF position
-
-For the Type-B to C cable the USB standard specifies at 5K6 pulldown resistor between `CC` and `GND` (since the B side is the peripheral, CC pin needs to be pulled down for the A-side/host to recognize B side as peripheral). 
-
-We can test the exact value of this resistor by using a DMM between 
-`A_GND` and `A_CC1` 
-
-![](attachments/dd959de04ef8304902529b81821b52ff.jpg)
-
-> [!NOTE]
-> Note we don't need an isolation switch from the MCU on the `A_CC1` side since we have isolated both `B_GND` and `A_GND` sides
-
-![](attachments/94c0012adc95f0ae4bc2b46290270886.png)
-
-
-## DMM Testing of Ra
-
-1. With device ON, make sure the CC orientation is `STD>STD`
-2. Switch isolation switches to OFF
-3. Switch power OFF
-4. Place a DMM between `B_CC2` and `B_GND`
-
-![](attachments/9af4e6435ac2a8d08bfff3ad94294580.jpg)
-
+# MCU Testing Logic 
 
 ## MCU Testing of Rp on Type-A to Type-C Cable
 
@@ -183,7 +144,57 @@ In the schematic these are modeled as a multi-unit DIP switch:
 - `SW2C`: Separates `A_GND` from `A_GND_SENS` (input to MCU)
 - `SW2D`: Separates `A_VBUS` from `A_VBUS_SENS` (input to MCU)
 
-## Shields and ID Pin
+# DMM Testing
+
+## DMM Testing of  Rp on CC line
+
+> [!Caution]
+> Verify the following:
+> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding.
+> 2. All DIP switches are in the OFF position
+> 3. Power switch is in the OFF position
+
+For the Type-A to C cable the USB standard specifies at 56K pullup resistor between `VBUS` and `CC` (since the A side is the host, CC pin needs to be pulled up for the B-side/peripheral to recognize A side as host). 
+
+We can test the exact value of this resistor by using a DMM between `B_VBUS` and `B_CC1` testing pads.
+
+![](attachments/e3cffc83784986d4a272780f084790a6.jpg)
+
+![](attachments/beb8976630d9035289f34051b11eb72b.png)
+
+## DMM Testing of Rd
+
+> [!Caution]
+> Verify the following:
+> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding.
+> 2. All DIP switches are in the OFF position
+> 3. Power switch is in the OFF position
+
+For the Type-B to C cable the USB standard specifies at 5K6 pulldown resistor between `CC` and `GND` (since the B side is the peripheral, CC pin needs to be pulled down for the A-side/host to recognize B side as peripheral). 
+
+We can test the exact value of this resistor by using a DMM between 
+`A_GND` and `A_CC1` 
+
+![](attachments/dd959de04ef8304902529b81821b52ff.jpg)
+
+> [!NOTE]
+> Note we don't need an isolation switch from the MCU on the `A_CC1` side since we have isolated both `B_GND` and `A_GND` sides
+
+![](attachments/94c0012adc95f0ae4bc2b46290270886.png)
+
+
+## DMM Testing of Ra
+
+1. With device ON, make sure the CC orientation is `STD>STD`
+2. Switch isolation switches to OFF
+3. Switch power OFF
+4. Place a DMM between `B_CC2` and `B_GND`
+
+![](attachments/9af4e6435ac2a8d08bfff3ad94294580.jpg)
+
+
+
+# Shields and ID Pin
 
 ### Shields 
 Shields are connected together and exposed to a through hole testing terminal. For this we can test with a multimeter. 
@@ -214,9 +225,12 @@ Since the ID pin is supposed to be tied to its ground pin within the plug, we ju
 ![](attachments/1267dab6a82f90a7f48ecedca57b1e16.png)
 
 ### Attributions
-- tip icon https://thenounproject.com/icon/tip-6063021/
+**Icons**
+- Fedora Hat by Sanjib Biswas from [vecteezy](https://www.vecteezy.com/png/24758745-fedora-hat-transparent-background) -  <a href="https://www.vecteezy.com/free-png/silhouette">Silhouette PNGs by Vecteezy</a>
+- tip by Hothouse Design from <a href="https://thenounproject.com/browse/icons/term/tip/" target="_blank" title="tip Icons">Noun Project</a> (CC BY 3.0)
+- Warning by Deylotus Creative Design from <a href="https://thenounproject.com/browse/icons/term/warning/" target="_blank" title="Warning Icons">Noun Project</a> (CC BY 3.0)
 
-Inspirations
+**Inspired By**
 - https://github.com/petl/USB-C-cable-tester-C2C-caberQU
 - https://github.com/alvarop/usb_c_cable_tester
-- https://github.com/aroerina/LimePulse_USB_cable_checker/tree/master - mostly ripped off the design from this one, heh -- although I will open source my firmware.
+- https://github.com/aroerina/LimePulse_USB_cable_checker/tree/master - mostly ripped off the hardware design from this one, heh -- although I will open source my firmware.
