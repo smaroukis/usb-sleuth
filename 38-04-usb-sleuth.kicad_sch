@@ -4241,7 +4241,7 @@
     (pin "1" (uuid 946f25fc-22a9-4b34-b971-893682abf41f))
     (pin "2" (uuid 9ff5b4c5-7de3-4e88-8171-8ffaa7ff31e7))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D9") (unit 1)
         )
@@ -4266,7 +4266,7 @@
     )
     (pin "1" (uuid 098e591c-8891-4d34-8269-a9a6517e09bb))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#FLG03") (unit 1)
         )
@@ -4319,7 +4319,7 @@
     (pin "7" (uuid 4c9c6d72-c28a-4350-a13e-4c752b8d6612))
     (pin "8" (uuid 16834a84-a194-4244-bed6-3dabfd3fdab3))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN1") (unit 1)
         )
@@ -4369,7 +4369,7 @@
     (pin "1" (uuid 2a85c723-e462-45c1-a039-38418caa42a0))
     (pin "2" (uuid b46237ce-784e-4e45-9f46-c18816b72194))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D10") (unit 1)
         )
@@ -4397,7 +4397,7 @@
     )
     (pin "1" (uuid a7c68b44-52c5-46e0-8fbf-866345c0a62a))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR03") (unit 1)
         )
@@ -4422,7 +4422,7 @@
     )
     (pin "1" (uuid cd47a10c-471f-4345-a750-e3b1ea3f9ddb))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR09") (unit 1)
         )
@@ -4472,7 +4472,7 @@
     (pin "1" (uuid 4b29b8a1-b8f9-4e9a-9423-e927c5bcaae8))
     (pin "2" (uuid d8669000-4248-4cf7-9065-556c35af4977))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D14") (unit 1)
         )
@@ -4497,7 +4497,7 @@
     )
     (pin "1" (uuid c8db605a-ffba-434e-940e-f79ef7ca426e))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR04") (unit 1)
         )
@@ -4547,7 +4547,7 @@
     (pin "2" (uuid 1a71f42c-470e-4aca-9940-7ac8753d12c0))
     (pin "1" (uuid 55524664-9c4e-4ab7-a584-6ba9f8563779))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "C3") (unit 1)
         )
@@ -4597,7 +4597,7 @@
     (pin "1" (uuid 3b04e373-5a1a-4c7d-9e37-2bee89847c98))
     (pin "2" (uuid 28bf29b8-3624-4712-b0e3-a7378dd66038))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D3") (unit 1)
         )
@@ -4647,7 +4647,7 @@
     (pin "1" (uuid ae39e3e0-96de-4417-8827-57b13dc5e39a))
     (pin "2" (uuid 738e37fb-b60a-41c9-ad02-4ee9a55dacb6))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D16") (unit 1)
         )
@@ -4696,7 +4696,7 @@
     )
     (pin "1" (uuid 959c1177-3e35-4670-a684-f27f38ea04a5))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H7") (unit 1)
         )
@@ -4721,7 +4721,7 @@
     )
     (pin "1" (uuid 1212a8de-e9b8-4a54-be60-6dbfa55f530f))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR012") (unit 1)
         )
@@ -4777,7 +4777,7 @@
     (pin "2" (uuid cbea7779-8551-4e9d-8f97-b76f4001a6a3))
     (pin "1" (uuid d9623e37-507f-46b6-8c7c-eb5eff75ddee))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "SW2") (unit 2)
         )
@@ -4826,7 +4826,7 @@
     )
     (pin "1" (uuid 1c5e9260-9a5e-4072-9bab-37fb907f98f7))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H11") (unit 1)
         )
@@ -4851,7 +4851,7 @@
     )
     (pin "1" (uuid 42bb4383-5fa7-45e1-9406-33f612995920))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#FLG01") (unit 1)
         )
@@ -4904,7 +4904,7 @@
     (pin "4" (uuid 1678e0ce-12bd-455d-bc8e-aaefecc67506))
     (pin "5" (uuid b18e7222-5622-43c6-be7d-bed639b57d60))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "J1") (unit 1)
         )
@@ -4929,7 +4929,7 @@
     )
     (pin "1" (uuid 71e38d73-deef-4d40-b5d9-d315167fe43d))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR015") (unit 1)
         )
@@ -4979,7 +4979,7 @@
     (pin "1" (uuid e6bfb18b-df27-48f4-b5f9-b675c1858022))
     (pin "2" (uuid 90ac1638-d10d-4e08-8575-acaf4277993c))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D22") (unit 1)
         )
@@ -5029,7 +5029,7 @@
     (pin "2" (uuid cd80aa53-5c91-4f1d-92ee-3accbd92adb5))
     (pin "1" (uuid f251b397-029a-4cf0-acd8-a3ecaf34bd9b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "C2") (unit 1)
         )
@@ -5079,7 +5079,7 @@
     (pin "1" (uuid a7c34d7c-9e57-45fd-a267-2989c362f714))
     (pin "2" (uuid 2eafd65c-211d-45cb-81be-c5c59e231f98))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D20") (unit 1)
         )
@@ -5129,7 +5129,7 @@
     (pin "1" (uuid 632a7cea-1f8d-4903-9f9d-683db744277e))
     (pin "2" (uuid aa7afd7b-ddf2-4378-b65b-051ba3eeefd5))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D18") (unit 1)
         )
@@ -5179,7 +5179,7 @@
     (pin "1" (uuid 85fdc5c8-2c58-4e7a-803a-49535d88c2cf))
     (pin "2" (uuid dd3b4929-ad6c-4d79-ba98-37904bc78ecf))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D19") (unit 1)
         )
@@ -5230,7 +5230,7 @@
     (pin "2" (uuid 144fb343-7770-4eda-8455-714037b2e7cf))
     (pin "1" (uuid 1db1ca08-036d-46a5-ab51-f88b0eab8ebe))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "SW1") (unit 2)
         )
@@ -5280,7 +5280,7 @@
     (pin "1" (uuid 33ceed22-9257-4cda-b920-3ae98f0e4fac))
     (pin "2" (uuid 1d76ee59-ca3b-4fde-b7f1-4722312f726e))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "R4") (unit 1)
         )
@@ -5334,7 +5334,7 @@
     (pin "5" (uuid a0801c58-bef6-434a-ab49-54f5d876ac37))
     (pin "6" (uuid 3af0fbe2-7526-439c-b112-b484432ecfb4))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "J4") (unit 1)
         )
@@ -5383,7 +5383,7 @@
     )
     (pin "1" (uuid 8335085d-2fa8-4a9c-afd6-90e8ee853e49))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H4") (unit 1)
         )
@@ -5411,7 +5411,7 @@
     )
     (pin "1" (uuid 3b93780d-297f-490f-861b-c301b3bf4105))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR016") (unit 1)
         )
@@ -5436,7 +5436,7 @@
     )
     (pin "1" (uuid 8b9726cf-8f8c-4bd5-b16c-dd5830891aa1))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR013") (unit 1)
         )
@@ -5461,7 +5461,7 @@
     )
     (pin "1" (uuid 0f3061fd-3c73-482a-9514-a99ad3ce7f7b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR026") (unit 1)
         )
@@ -5511,7 +5511,7 @@
     (pin "1" (uuid 766a5fff-7207-4b60-92d5-591564b63f9d))
     (pin "2" (uuid 7cbb0625-6ed2-4049-bed2-117126180284))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D11") (unit 1)
         )
@@ -5539,7 +5539,7 @@
     )
     (pin "1" (uuid f69072a0-eb8a-43d1-b363-2d150764d2cd))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#FLG02") (unit 1)
         )
@@ -5564,7 +5564,7 @@
     )
     (pin "1" (uuid 1e9e195d-80c2-47ad-9ad8-9090960335ff))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR08") (unit 1)
         )
@@ -5613,7 +5613,7 @@
     )
     (pin "1" (uuid 9d1ac206-bbaf-44a3-ba84-0b1120b60677))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H10") (unit 1)
         )
@@ -5663,7 +5663,7 @@
     (pin "1" (uuid 79cbf3b8-d24d-4fd0-a586-ce92c8c18e8f))
     (pin "2" (uuid c4b1e010-821b-4d69-9395-d78b6e18bea0))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D23") (unit 1)
         )
@@ -5713,7 +5713,7 @@
     (pin "2" (uuid 70382e0b-3b70-43ca-9c53-e2b675fe8633))
     (pin "1" (uuid 9f3000e3-dc18-4b33-97f4-fc05dcb6d8b3))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "R3") (unit 1)
         )
@@ -5763,7 +5763,7 @@
     (pin "1" (uuid 7dd86054-ca18-4a46-b54f-c3e4548e81ae))
     (pin "2" (uuid 36aac499-325b-4eb6-ad91-4eaae41b3c37))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D17") (unit 1)
         )
@@ -5816,7 +5816,7 @@
     (pin "7" (uuid ce5494d6-188f-412a-86e7-00d67dc0344a))
     (pin "8" (uuid 8119bcd9-ca86-4faa-a269-03b0dcbf6b59))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN2") (unit 1)
         )
@@ -5866,7 +5866,7 @@
     (pin "2" (uuid d76c994d-7504-411b-ab82-73fb8799a650))
     (pin "1" (uuid de86b59b-3918-477a-9964-bcc055f55a1b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D1") (unit 1)
         )
@@ -5924,7 +5924,7 @@
     (pin "8" (uuid ff0d463e-834a-46d0-9dc4-0b7be6d445b4))
     (pin "9" (uuid ab03ec2d-413b-4814-a114-977d94e215fd))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "J6") (unit 1)
         )
@@ -5949,7 +5949,7 @@
     )
     (pin "1" (uuid 90e35f24-f5bc-452f-bdb1-d4d734484f22))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR07") (unit 1)
         )
@@ -5999,7 +5999,7 @@
     (pin "1" (uuid 3a312d76-3533-4ff5-bb1c-267b3ca189d6))
     (pin "2" (uuid e445d038-218f-4bdd-9f2d-61ffa0c4f31b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D2") (unit 1)
         )
@@ -6048,7 +6048,7 @@
     )
     (pin "1" (uuid 69923491-cdaa-4c72-997b-c37211205da2))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H2") (unit 1)
         )
@@ -6097,7 +6097,7 @@
     )
     (pin "1" (uuid 2ae182f3-976b-49b8-83e4-55360841423d))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H3") (unit 1)
         )
@@ -6147,7 +6147,7 @@
     (pin "1" (uuid 4571d95c-d151-4886-ad11-0e9ff7fb2b20))
     (pin "2" (uuid d088c6f7-7961-4a8f-b81c-0ef37d100b2d))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D24") (unit 1)
         )
@@ -6197,7 +6197,7 @@
     (pin "1" (uuid 975d6aa8-6ef1-4113-8896-e74c0cf5638d))
     (pin "2" (uuid 10cc0fb9-e18f-43f5-bef6-839f71761b76))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D7") (unit 1)
         )
@@ -6309,7 +6309,7 @@
     (pin "B9" (uuid b8466078-9bb8-42ec-a8ad-b039eafb9157))
     (pin "B6" (uuid 0dffb9a7-a4cf-4727-b430-60b2a8906ccd))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "J3") (unit 1)
         )
@@ -6359,7 +6359,7 @@
     (pin "1" (uuid 5094fc6c-84e1-4389-9977-7ff449faeada))
     (pin "2" (uuid fc2f0e66-b605-4b89-8503-a8ce4626a719))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D8") (unit 1)
         )
@@ -6409,7 +6409,7 @@
     (pin "1" (uuid b4548038-bbdc-4da9-a4da-d9fc746f2e25))
     (pin "2" (uuid 8928d635-d1d6-4861-8481-328c2084ead3))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D15") (unit 1)
         )
@@ -6458,7 +6458,7 @@
     )
     (pin "1" (uuid 17e4e22f-f91b-4b8e-b5d0-746a07ccad3f))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H12") (unit 1)
         )
@@ -6535,7 +6535,7 @@
     (pin "6" (uuid d261fb2e-4cd3-4d62-91e5-a712e0b5bea3))
     (pin "32" (uuid 86daa28e-8732-46a2-b4c1-1b3920e1c742))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "U1") (unit 1)
         )
@@ -6588,7 +6588,7 @@
     (pin "7" (uuid 4a1a9ddc-a778-484d-96e0-b6bafd070a65))
     (pin "8" (uuid 11435342-c38c-4ab7-9a93-3a493d108750))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN5") (unit 1)
         )
@@ -6638,7 +6638,7 @@
     (pin "1" (uuid d2a1f036-b9e0-4766-ad46-aef418234ab4))
     (pin "2" (uuid 752a8d4a-5fc9-491a-a956-a8122f903caf))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D5") (unit 1)
         )
@@ -6688,7 +6688,7 @@
     (pin "2" (uuid 01fe342d-47c7-4b0c-9517-17f9bb7a9a4b))
     (pin "1" (uuid 418008af-01d7-4464-afa3-6abeece2d968))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "R2") (unit 1)
         )
@@ -6713,7 +6713,7 @@
     )
     (pin "1" (uuid 3f165629-71ca-4baf-93ee-64c005fdea4e))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR06") (unit 1)
         )
@@ -6741,7 +6741,7 @@
     )
     (pin "1" (uuid e6874b29-6e01-4be7-80f8-edd7a901e0c4))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR01") (unit 1)
         )
@@ -6791,7 +6791,7 @@
     (pin "1" (uuid 322b2bd9-9ff6-45d8-b19f-8056fc343319))
     (pin "2" (uuid c8a8ebba-f054-431d-9ae9-4444bc723cf2))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D6") (unit 1)
         )
@@ -6840,7 +6840,7 @@
     )
     (pin "1" (uuid 11026987-8abe-4394-bfa7-44a19f43a782))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H1") (unit 1)
         )
@@ -6890,7 +6890,7 @@
     (pin "1" (uuid 17f4c4ea-b8d7-4cda-b06e-1a8b530cff13))
     (pin "2" (uuid 6aeb0dff-2f9d-4d06-bcd7-6d9c6813633f))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D21") (unit 1)
         )
@@ -6918,7 +6918,7 @@
     )
     (pin "1" (uuid cd06f833-6a5c-4696-82f6-88f2d3a09df6))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR014") (unit 1)
         )
@@ -6943,7 +6943,7 @@
     )
     (pin "1" (uuid 50dc310c-53f8-44f3-bc90-946edaa82952))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR022") (unit 1)
         )
@@ -6999,7 +6999,7 @@
     (pin "2" (uuid cbea7779-8551-4e9d-8f97-b76f4001a6a4))
     (pin "1" (uuid d9623e37-507f-46b6-8c7c-eb5eff75ddef))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "SW2") (unit 4)
         )
@@ -7048,7 +7048,7 @@
     )
     (pin "1" (uuid e3674b32-b665-462f-ace7-1622ff8e36b4))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H8") (unit 1)
         )
@@ -7104,7 +7104,7 @@
     (pin "2" (uuid cbea7779-8551-4e9d-8f97-b76f4001a6a5))
     (pin "1" (uuid d9623e37-507f-46b6-8c7c-eb5eff75ddf0))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "SW2") (unit 1)
         )
@@ -7129,7 +7129,7 @@
     )
     (pin "1" (uuid 74b86efd-e249-4f77-9882-89c71801e0d7))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR024") (unit 1)
         )
@@ -7185,7 +7185,7 @@
     (pin "2" (uuid cbea7779-8551-4e9d-8f97-b76f4001a6a6))
     (pin "1" (uuid d9623e37-507f-46b6-8c7c-eb5eff75ddf1))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "SW2") (unit 3)
         )
@@ -7210,7 +7210,7 @@
     )
     (pin "1" (uuid 44f069eb-7135-47c6-9b66-fd0b5efff2ab))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR010") (unit 1)
         )
@@ -7260,7 +7260,7 @@
     (pin "1" (uuid 4e9dfee6-ae9c-40f8-8f13-01d05b37bd73))
     (pin "2" (uuid 52b118d2-7b4f-4e8d-8ba1-1a5270f69c1b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D4") (unit 1)
         )
@@ -7285,7 +7285,7 @@
     )
     (pin "1" (uuid 8c632a99-3a1c-4d61-a413-8a7830147b30))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR023") (unit 1)
         )
@@ -7338,7 +7338,7 @@
     (pin "7" (uuid 11ecb237-20e1-4174-97c3-6351cd305461))
     (pin "8" (uuid 44aabbcc-131d-42c5-aa31-3a9feac181d4))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN7") (unit 1)
         )
@@ -7388,7 +7388,7 @@
     (pin "2" (uuid 2bee7dfa-afb2-4fb7-ad4a-00ad83968a85))
     (pin "1" (uuid f7a2db5d-e4a7-47fc-bc21-31a0979adf08))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "R1") (unit 1)
         )
@@ -7442,7 +7442,7 @@
     (pin "5" (uuid 7c1d6e47-e8d8-4174-96f3-910233cfee18))
     (pin "6" (uuid 00abc62d-3f60-42a9-b9ed-18eae733da0a))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "J5") (unit 1)
         )
@@ -7467,7 +7467,7 @@
     )
     (pin "1" (uuid c6f3ab41-5813-4783-9ed5-b51def0d81ba))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR05") (unit 1)
         )
@@ -7517,7 +7517,7 @@
     (pin "2" (uuid 5028a9a7-ee9d-4634-9590-c0bf18a7f2cd))
     (pin "1" (uuid 0db52d53-d8fc-45a0-b616-fe073d839194))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "C1") (unit 1)
         )
@@ -7542,7 +7542,7 @@
     )
     (pin "1" (uuid f0be992f-f9f0-480e-aac3-e28adce912b8))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR021") (unit 1)
         )
@@ -7592,7 +7592,7 @@
     (pin "1" (uuid d9c8e2f4-76a2-4445-a7aa-580dcf348f92))
     (pin "2" (uuid 1bdfd6c9-345e-425c-99d6-b2838005e901))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D12") (unit 1)
         )
@@ -7617,7 +7617,7 @@
     )
     (pin "1" (uuid e7662534-1bc1-411c-9a98-532625eebcaa))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR011") (unit 1)
         )
@@ -7667,7 +7667,7 @@
     (pin "1" (uuid 8f1401b4-83fc-452d-8711-7f38483f2c51))
     (pin "2" (uuid 8196c5a9-5d2c-4687-916c-8d4353d0df96))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "C5") (unit 1)
         )
@@ -7692,7 +7692,7 @@
     )
     (pin "1" (uuid 15df6b75-0a42-4476-a93d-f4744628282e))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR02") (unit 1)
         )
@@ -7742,7 +7742,7 @@
     (pin "1" (uuid 69f16083-7218-4afa-907a-22811fd26104))
     (pin "2" (uuid a8681127-d869-4987-879c-f9b9481ffc22))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D25") (unit 1)
         )
@@ -7795,7 +7795,7 @@
     (pin "7" (uuid 81b516b0-59bd-406b-8a9d-1fd1805b6470))
     (pin "8" (uuid 399b5a65-d879-4555-a3be-9801642edaee))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN3") (unit 1)
         )
@@ -7845,7 +7845,7 @@
     (pin "2" (uuid f21ad777-46b0-4ecd-8c1d-a7b7c2c4e79b))
     (pin "1" (uuid 42465a60-79af-4868-a052-5cdb9c36847a))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "C4") (unit 1)
         )
@@ -7895,7 +7895,7 @@
     (pin "2" (uuid 5b3638d5-be9c-49e3-a114-adcf8f3d0c0f))
     (pin "1" (uuid 71a71f1c-b254-48a2-808d-1fdc383e3cad))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "R5") (unit 1)
         )
@@ -7948,7 +7948,7 @@
     (pin "7" (uuid 0f35b1e5-58af-4c6e-bbc0-118657272f98))
     (pin "8" (uuid 1d9ed444-a544-43d0-bb60-eab7fcdda60b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN4") (unit 1)
         )
@@ -7997,7 +7997,7 @@
     )
     (pin "1" (uuid b5694a27-d011-4779-b050-c8a07dfe81a6))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H9") (unit 1)
         )
@@ -8022,7 +8022,7 @@
     )
     (pin "1" (uuid 8f0cb752-e175-46e8-9496-c127e0eb2c3b))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR025") (unit 1)
         )
@@ -8072,7 +8072,7 @@
     (pin "1" (uuid 425a57f5-077d-4f37-99b5-c8519a7830a6))
     (pin "2" (uuid bc2edec4-a7a0-4853-a187-23faef6c9f17))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "D13") (unit 1)
         )
@@ -8123,7 +8123,7 @@
     (pin "2" (uuid 144fb343-7770-4eda-8455-714037b2e7d0))
     (pin "1" (uuid 1db1ca08-036d-46a5-ab51-f88b0eab8ebf))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "SW1") (unit 1)
         )
@@ -8176,7 +8176,7 @@
     (pin "7" (uuid 5e2298ea-7629-41d9-b882-86424202b0be))
     (pin "8" (uuid 778ddcad-8b6e-4e41-b3bf-9d11afd8862d))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "RN6") (unit 1)
         )
@@ -8226,7 +8226,7 @@
     (pin "1" (uuid fe3bd147-a4eb-4f58-b3de-2cab1e1810ba))
     (pin "2" (uuid d68639b3-d514-41e9-a30d-568bef619ade))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "BT1") (unit 1)
         )
@@ -8275,7 +8275,7 @@
     )
     (pin "1" (uuid 177deab2-277b-4735-b8ed-5661a96528f2))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H5") (unit 1)
         )
@@ -8387,7 +8387,7 @@
     (pin "B9" (uuid 67dedde9-10c4-44ad-baf2-8b5c6e2c9fda))
     (pin "B6" (uuid dfcc10ce-1697-451d-bff6-1faaddfa0321))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "J2") (unit 1)
         )
@@ -8436,7 +8436,7 @@
     )
     (pin "1" (uuid df618817-1f8b-413c-b3ab-a1af7098f0e1))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "H6") (unit 1)
         )
@@ -8461,7 +8461,7 @@
     )
     (pin "1" (uuid 356d62fa-1730-40d4-a7df-d52ee73be3a3))
     (instances
-      (project "38-04-usb-tester"
+      (project "38-04-usb-sleuth"
         (path "/450ad4bb-cada-4792-8f0e-c28850095e87"
           (reference "#PWR019") (unit 1)
         )
