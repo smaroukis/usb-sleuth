@@ -1,0 +1,6 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "EXT_usb-c-AMPHENOL-12401832E402A")(type "KiCad")(uri "/Users/s/Documents/KiCad/UserFiles/usb-c-AMPHENOL-12401832E402A/12401832E402A.kicad_sym")(options "")(descr "")(disabled))
+  (lib (name "EXT_old-10137061-00021LF")(type "KiCad")(uri "/Users/s/Documents/KiCad/UserFiles/usb-c-10137061_00021LF/10137061-00021LF.kicad_sym")(options "")(descr "")(disabled))
+  (lib (name "02-UserSymbols")(type "KiCad")(uri "${KIPRJMOD}/02-UserSymbols/02-UserSymbols.kicad_sym")(options "")(descr ""))
+)

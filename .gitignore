@@ -1,8 +1,12 @@
 38-04-usb-tester-backups
 38-04-usb-tester.kicad_sch-bak
 ~38-04-usb-tester.kicad_sch.lck
+
+# Folders
+src/
+99-Notes-Screenshots/
+
+# Cache things
+.DS_Store
 fp-info-cache
 fp-lib-table
-.gitignore
-src/.DS_Store
-.gitignore
