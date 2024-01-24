@@ -4,6 +4,8 @@
 
 # Folders
 src/
+!/src/01-blinky-STM32-HAL
+!/src/02-cc-orientation
 99-Notes-Screenshots/
 
 # Cache things
