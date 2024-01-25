@@ -31,26 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-// LED pins
-#define GND_LED GPIO_PIN_0 // PB0, give port in HAL function call
-#define VBUS_LED GPIO_PIN_1 // PB1
-#define CC_aa_LED GPIO_PIN_2 // PB2
-#define CC_ab_LED GPIO_PIN_3 // PB3
-#define CC_bb_LED GPIO_PIN_4 // PB4
-#define CC_ba_LED GPIO_PIN_5 // PB5
-#define Emarker_LED GPIO_PIN_6 // PB6
-#define CC_Rp_LED GPIO_PIN_7 // PB7
-#define CC_Rd_LED GPIO_PIN_8 // PB8
 
-// Inputs & Outputs
-#define GND_SENSE GPIO_PIN_0 // PA0
-#define VBUS_SENSE GPIO_PIN_1 // PA1
-#define CC1_CTRL GPIO_PIN_2 // PA2
-#define CC2_CTRL GPIO_PIN_3 // PA3
-#define B_CC1_SENSE GPIO_PIN_4 // PA4
-#define B_CC2_SENSE GPIO_PIN_5 // PA5
-#define A_CC1 GPIO_PIN_6 // PA6
-#define A_CC2 GPIO_PIN_7 // PA7
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -126,13 +107,7 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-  // GPIO pins are initialized as per the CubeMX pin layout GUI → see MX_PIO_INIT() above
-  // All input are floating except GND_SENSE should be pullup
-  GPIO_InitTypeDef initGndSense = {0};
-  initGndSense.Pin = GPIO_PIN_0;
-  initGndSense.Mode = GPIO_MODE_INPUT;
-  initGndSense.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOA, &initGndSense);
+  // Note reconfigured GND_SENSE_Pin as Pullup in MX_GPIO_INIT() function above; all others are floating
 
   /* USER CODE END 2 */
 
@@ -140,11 +115,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+//	  // #bug ground LED "latches" on  →Need to set GND_Sense as pullup each time?
+//	  GPIO_InitTypeDef GPIO_InitStruct = {0};
+//	  GPIO_InitStruct.Pin = GND_SENSE_Pin;
+//	  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+//	  GPIO_InitStruct.Pull = GPIO_PULLUP; // <---
+//	  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	  // ------ Section 1 - Testing Ground Line ---------
 	  // Requires: GND_SENSE pin as pullup input, SW2B == CLOSED (B_GND_B1 → GND)
 	  // Check if the A side ground pin is pulled to ground (short), else HIGH via internal Rp
-	  if (HAL_GPIO_ReadPin(GPIOA, GND_SENSE) == GPIO_PIN_RESET) {
+	  if (HAL_GPIO_ReadPin(GPIOA, GND_SENSE_Pin) == GPIO_PIN_RESET) {
 		  gnd_conn = 1;
 	  }
 	  else {
@@ -154,17 +135,71 @@ int main(void)
 	  // ------ Section 2 - Testing VBUS Line ---------
 	  // Requires: SW2A == Closed (VBUS_A4 → VDD via 2K)
 	  // B_VBUS is pulled up to Vdd via 2K; A_VBUS_SENSE is pulled down via 10K; Vsense = 10K/12K = HIGH
-	  if (HAL_GPIO_ReadPin(GPIOA, VBUS_SENSE) == HIGH) {
+	  if (HAL_GPIO_ReadPin(GPIOA, VBUS_SENSE_Pin) == GPIO_PIN_SET ) {
 	    vbus_conn = 1;
 	  }
 	  else {
 	    vbus_conn = 0;
 	  }
 
+	  // ------ Section 3 - Test for USB C <> USB C --------
+	  // Test Requires: A_CC1 == HIGH & A_CC2_Pin, CCx_CTRL_PIN == LOW
+	  // Check B_CCx_Sense == A_CC1 with A_CC1 HIGH and all others LOW
+	  // Note since A_CC1_Pin is an ADC pin we need to disable ADC
+	    HAL_ADC_Stop(&hadc1);
+	    // Configure A_CC1 as GPIO output HIGH
+	    __HAL_RCC_GPIOA_CLK_ENABLE();
+	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin|A_CC2_Pin|B_CC1_SENSE_Pin|B_CC2_SENSE_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET); // reset before config
+	    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+	    // Configure A_CC1 as Output HIGH
+	    GPIO_InitStruct.Pin = A_CC1_Pin;
+	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_SET); // A_CC1 → HIGH
+
+	    // Configure B_CCx_Sense pins as floating inputs
+	    GPIO_InitStruct.Pin = B_CC1_SENSE_Pin | B_CC2_SENSE_Pin;
+	    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	    // Configure pins as output LOW (A_CC2, CCx_CTRL)
+	    GPIO_InitStruct.Pin = (A_CC2_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin);
+	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct); // note speed is already set low
+	    // pin already reset previously
+	    // if B_CCx_Sense is HIGH then it is connected to A_CC1
+	    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
+	    	cc_conn_aa = 1;
+	    }
+	    else {
+	    	cc_conn_aa = 0;
+	    }
+
+	  // ------ Section X - Drive LEDs -----------
+	  // Port A: [8..0] is p CC_Rp_LED_Pin CC_Rd_LED_Pin ... VBUS_LED_Pin GND_LED_Pin ]
+	  uint16_t led_mask = (
+			  gnd_conn << 0 |
+			  vbus_conn << 1 |
+			  cc_conn_aa << 2 |
+			  cc_conn_ab << 3 |
+			  cc_conn_bb << 4 |
+			  cc_conn_ba << 5 |
+			  Ra_conn << 6 |
+			  Rd_conn << 7 |
+			  Rp_conn << 8
+			  );
+
+	  // set the outputs to the current value of the flags (note no mask)
+	  GPIOB->ODR = ((uint16_t)led_mask); // set bits 0 to 8
+	  //HAL_Delay(10);
 
     /* USER CODE END WHILE */
 
-	   /* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -338,7 +373,7 @@ static void MX_GPIO_Init(void)
                           |CC_Rp_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : GND_SENSE_Pin VBUS_SENSE_Pin */
-  GPIO_InitStruct.Pin = GND_SENS_Pin|VBUS_SENS_Pin;
+  GPIO_InitStruct.Pin = GND_SENSE_Pin|VBUS_SENSE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -362,6 +397,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
+  // Reconfigure GND_LED_Pin as INPUT_PULLUP (couldn't figure out how to do this in the viewer)
+  GPIO_InitStruct.Pin = GND_SENSE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP; // <---
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
