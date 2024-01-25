@@ -169,15 +169,67 @@ int main(void)
 	    GPIO_InitStruct.Pin = (A_CC2_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin);
 	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	    GPIO_InitStruct.Pull = GPIO_NOPULL;
-	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct); // note speed is already set low
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	    // pin already reset previously
-	    // if B_CCx_Sense is HIGH then it is connected to A_CC1
+	    // Test 3A STD>STD or STD>FLIP: if B_CCx_Sense is HIGH then it is connected to A_CC1
 	    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
-	    	cc_conn_aa = 1;
+	    	cc_conn_aa = 1; // STD>STD is A_CC1→B_CC1
 	    }
 	    else {
 	    	cc_conn_aa = 0;
 	    }
+	    if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
+	    	cc_conn_ab = 1; // STD>FLIP is A_CC1→B_CC2
+	    }
+	    else {
+	    	cc_conn_ab = 0;
+	    }
+	    // TEST 3B FLIP>STD or FLIP>FLIP: with A_CC2 HIGH if B_CCx_Sense HIGH then → A_CC2
+	    // Requires: Set pins = [ACC2], RESET = [A_CC1, CCx_CTRL]
+	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_RESET);
+	    HAL_GPIO_WritePin(GPIOA, A_CC2_Pin, GPIO_PIN_SET);
+	    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
+	    	cc_conn_ba = 1; // A_CC2→B_CC1 is FLIP>STD
+	    }
+	    else {
+	    	cc_conn_ba = 0;
+	    }
+	    if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
+	    	cc_conn_bb = 1; // A_CC2→B_CC2 is FLIP>FLIP
+	    }
+	    else {
+	    	cc_conn_bb = 0;
+	    }
+
+	    // ------- Section 4: Test Active Cable (E Marker) ------
+
+	    // Test 4A: Assuming aa or ab then we know VCONN would be on A_CC2
+	    // Requires: A_CC2 as INPUT_PULLUP
+	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
+	    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	    GPIO_InitStruct.Pull = GPIO_PULLUP;
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	    //
+	    if ( cc_conn_aa || cc_conn_ab ) {
+	    	if (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) {
+	    		Ra_conn = 1; // if pulled to ground then active cable
+	    	}
+	    	else {
+	    		Ra_conn = 0; // if we get here then it is missing
+	    	}
+	    }
+	    else if ( cc_conn_bb || cc_conn_ba ) {
+	    	if (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) {
+	    		Ra_conn = 1;
+	    	}
+	    	else {
+	    		Ra_conn = 0;
+	    	}
+	    }
+	    else {
+	    	Ra_conn = 0;
+	    }
+
 
 	  // ------ Section X - Drive LEDs -----------
 	  // Port A: [8..0] is p CC_Rp_LED_Pin CC_Rd_LED_Pin ... VBUS_LED_Pin GND_LED_Pin ]
