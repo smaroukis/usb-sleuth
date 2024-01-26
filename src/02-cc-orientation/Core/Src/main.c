@@ -76,44 +76,32 @@ static void MX_TIM1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-//static void adc1_init_start_pa4(void) {
-//
-//	/** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-//	  */
-//	  hadc1.Instance = ADC1;
-//	  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-//	  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-//	  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-//	  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-//	  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-//	  hadc1.Init.LowPowerAutoWait = DISABLE;
-//	  hadc1.Init.LowPowerAutoPowerOff = DISABLE;
-//	  hadc1.Init.ContinuousConvMode = DISABLE;
-//	  hadc1.Init.NbrOfConversion = 1;
-//	  hadc1.Init.DiscontinuousConvMode = DISABLE;
-//	  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-//	  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-//	  hadc1.Init.DMAContinuousRequests = DISABLE;
-//	  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-//	  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_1CYCLE_5;
-//	  hadc1.Init.SamplingTimeCommon2 = ADC_SAMPLETIME_1CYCLE_5;
-//	  hadc1.Init.OversamplingMode = DISABLE;
-//	  hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
-//	  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-//	  {
-//	    Error_Handler();
-//	  }
-//	  // Configure PA4
-//	  sConfig.Channel = ADC_CHANNEL_4;
-//	  sConfig.Rank = ADC_REGULAR_RANK_1;
-//	  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
-//	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-//	  {
-//	    Error_Handler();
-//	  }
-//
-//	  HAL_ADC_Start(&hadc1);
-//}
+static void ADC_Select04(void) {
+	  // Configure PA4
+	  ADC_ChannelConfTypeDef sConfig = {0};
+
+	  sConfig.Channel = ADC_CHANNEL_4;
+	  sConfig.Rank = 1;
+	  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
+
+	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+}
+
+static void ADC_Select05(void) {
+	  // Configure PA5
+	  ADC_ChannelConfTypeDef sConfig = {0};
+
+	  sConfig.Channel = ADC_CHANNEL_5;
+	  sConfig.Rank = 1;
+	  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
+	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+}
 
 /* USER CODE END 0 */
 
@@ -149,9 +137,6 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-	ADC_ChannelConfTypeDef sConfig = {0}; // also defined in the MX ADC init
-	sConfig.Rank = ADC_REGULAR_RANK_1;
-	sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
 
   // Note reconfigured GND_SENSE_Pin as Pullup in MX_GPIO_INIT() function above; all others are floating
 
@@ -161,12 +146,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  // #bug ground LED "latches" on  →Need to set GND_Sense as pullup each time?
-//	  GPIO_InitTypeDef GPIO_InitStruct = {0};
-//	  GPIO_InitStruct.Pin = GND_SENSE_Pin;
-//	  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-//	  GPIO_InitStruct.Pull = GPIO_PULLUP; // <---
-//	  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	  // #bug ground LED "latches" on  →Need to set GND_Sense as pullup each time?
 
 	  // ------ Section 1 - Testing Ground Line ---------
 	  // Requires: GND_SENSE pin as pullup input, SW2B == CLOSED (B_GND_B1 → GND)
@@ -191,8 +171,7 @@ int main(void)
 	  // ------ Section 3 - Test for USB C <> USB C --------
 	  // Test Requires: A_CC1 == HIGH & A_CC2_Pin, CCx_CTRL_PIN == LOW
 	  // Check B_CCx_Sense == A_CC1 with A_CC1 HIGH and all others LOW
-	  // Note since A_CC1_Pin is an ADC pin we need to disable ADC
-	    HAL_ADC_Stop(&hadc1);
+	  // TODO check A_CC1 is configured already in MX init
 	    // Configure A_CC1 as GPIO output HIGH
 	    __HAL_RCC_GPIOA_CLK_ENABLE();
 	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin|A_CC2_Pin|B_CC1_SENSE_Pin|B_CC2_SENSE_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET); // reset before config
@@ -304,47 +283,38 @@ int main(void)
 		    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 		    HAL_GPIO_WritePin(GPIOA, CC1_CTRL_Pin | CC2_CTRL_Pin, GPIO_PIN_RESET);
 
-		    // DELETE AFTER TEST
-		    HAL_GPIO_WritePin(GPIOA, CC2_CTRL_Pin, GPIO_PIN_SET);
-		    // /delete
-
 	    	// Configure B_CCx_Sense Pins as analog
 	    	GPIO_InitStruct.Pin = B_CC1_SENSE_Pin | B_CC2_SENSE_Pin;
 	    	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	    	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	    	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-	    	// Start ADC for B_CC1_Sense Pin PA4
-			sConfig.Channel = ADC_CHANNEL_4;
-			if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK){
-				Error_Handler();
-			}
+	    	// Configure ADC for B_CC1_Sense Pin PA4
+			ADC_Select04();
 			HAL_ADC_Start(&hadc1); // restart since we stopped it earlier
-			// poll to read
-		    //analog_val1 = HAL_ADC_PollForConversion(&hadc1, 500U); // Example ADC reads with STLink 3.3V supply: LOW=130, Rp=500, HIGH=3000
-			analog_val1 = HAL_ADC_GetValue(&hadc1);
-			if (analog_val1 > RP_THRESH ) {
+			// start, poll, assign
+		    HAL_ADC_PollForConversion(&hadc1, 500U);
+			analog_val1 = HAL_ADC_GetValue(&hadc1); // Example ADC reads with STLink 3.3V supply: LOW=130, Rp=500, HIGH=3000
+			HAL_ADC_Stop(&hadc1);
+
+			ADC_Select05();
+			HAL_ADC_Start(&hadc1);
+			// start, poll, assign
+		    HAL_ADC_PollForConversion(&hadc1, 500U);
+			analog_val2 = HAL_ADC_GetValue(&hadc1); // Example ADC reads with STLink 3.3V supply: LOW=130, Rp=500, HIGH=3000
+			HAL_ADC_Stop(&hadc1);
+			// #here - only one side changes analog reads - probably getting the same analog read register
+			// see discontniuous mode https://community.st.com/t5/stm32cubemx-mcus/reading-multiple-adc-channel/td-p/171369
+
+			if ( (analog_val1 > RP_THRESH) || (analog_val2) > RP_THRESH ) {
 				Rp_conn = 1;
 			}
 			else {
 				Rp_conn = 0;
 			}
+
+
 			// #here Rp sense in one direction
-
-	    	// Start ADC for B_CC2_Sense Pin PA5
-//			sConfig.Channel = ADC_CHANNEL_5;
-//			if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK){
-//				Error_Handler();
-//			}
-//		    analog_val2 = HAL_ADC_PollForConversion(&hadc1, 500U);
-//	    	// Set CC1_CTRL → LOW
-//	    	// Analog Read B_CC1_Sense
-//	    	// If > Rp_Thresh then Rp exists
-//	    	// Disable ADC when done
-//	    	// TODO - test with cable flipped on C side
-//			HAL_ADC_Stop(&hadc1);
-	    }
-
 
 	  // ------ Section X - Drive LEDs -----------
 	  // Port A: [8..0] is p CC_Rp_LED_Pin CC_Rd_LED_Pin ... VBUS_LED_Pin GND_LED_Pin ]
@@ -369,6 +339,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
+}
 }
 
 /**
@@ -431,19 +402,17 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
   hadc1.Init.LowPowerAutoPowerOff = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_1CYCLE_5;
-  hadc1.Init.SamplingTimeCommon2 = ADC_SAMPLETIME_1CYCLE_5;
+  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_7CYCLES_5;
   hadc1.Init.OversamplingMode = DISABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -453,9 +422,16 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
   sConfig.Channel = ADC_CHANNEL_5;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
