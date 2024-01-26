@@ -45,6 +45,8 @@ ADC_HandleTypeDef hadc1;
 TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
+
+
 // flags
 uint8_t gnd_conn = 0;
 uint8_t vbus_conn = 0;
@@ -56,7 +58,9 @@ uint8_t Rp_conn = 0;
 uint8_t Rd_conn = 0;
 uint8_t Ra_conn = 0;
 uint8_t flag_firstrun = 1;
-uint16_t THRESH_RP = 400;
+uint16_t RP_THRESH = 400;
+int analog_val1;
+int analog_val2;
 
 /* USER CODE END PV */
 
@@ -71,6 +75,45 @@ static void MX_TIM1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+//static void adc1_init_start_pa4(void) {
+//
+//	/** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+//	  */
+//	  hadc1.Instance = ADC1;
+//	  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+//	  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+//	  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+//	  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+//	  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+//	  hadc1.Init.LowPowerAutoWait = DISABLE;
+//	  hadc1.Init.LowPowerAutoPowerOff = DISABLE;
+//	  hadc1.Init.ContinuousConvMode = DISABLE;
+//	  hadc1.Init.NbrOfConversion = 1;
+//	  hadc1.Init.DiscontinuousConvMode = DISABLE;
+//	  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+//	  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+//	  hadc1.Init.DMAContinuousRequests = DISABLE;
+//	  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+//	  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_1CYCLE_5;
+//	  hadc1.Init.SamplingTimeCommon2 = ADC_SAMPLETIME_1CYCLE_5;
+//	  hadc1.Init.OversamplingMode = DISABLE;
+//	  hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
+//	  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+//	  {
+//	    Error_Handler();
+//	  }
+//	  // Configure PA4
+//	  sConfig.Channel = ADC_CHANNEL_4;
+//	  sConfig.Rank = ADC_REGULAR_RANK_1;
+//	  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
+//	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//	  {
+//	    Error_Handler();
+//	  }
+//
+//	  HAL_ADC_Start(&hadc1);
+//}
 
 /* USER CODE END 0 */
 
@@ -106,6 +149,9 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+	ADC_ChannelConfTypeDef sConfig = {0}; // also defined in the MX ADC init
+	sConfig.Rank = ADC_REGULAR_RANK_1;
+	sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
 
   // Note reconfigured GND_SENSE_Pin as Pullup in MX_GPIO_INIT() function above; all others are floating
 
@@ -203,7 +249,7 @@ int main(void)
 
 	    // ------- Section 4: Test Active Cable (E Marker) ------
 
-	    // Test 4A: Assuming aa or ab then we know VCONN would be on A_CC2
+	    // Test 4: Assuming aa or ab then we know VCONN would be on A_CC2
 	    // Requires: A_CC2 as INPUT_PULLUP
 	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
 	    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -228,6 +274,75 @@ int main(void)
 	    }
 	    else {
 	    	Ra_conn = 0;
+	    }
+	    // Set A side back to output -- TODO delete if dont' need
+//	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
+//	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT;
+//	    GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+//	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin | A_CC2_Pin, GPIO_PIN_RESET);
+
+	    // Test 5 & 6 - Type C to Type A or Type B Pullup or Pulldown
+	    // Only test if cc not connected
+	    if ( cc_conn_aa || cc_conn_ab || cc_conn_ba || cc_conn_bb == 0) {
+	    	// Test 5 - Type C to B Pulldown 5K6
+	    	// Requires: SW2B CLOSED, A_CC1 INPUT PULLUP
+	    	// Result: If ACCx digital read is LOW then pulldown exists
+	    	if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
+	    		Rd_conn = 1;
+	    		// TODO/future also add a orientation test for the C side but it would require a seperate "is_usb_c-c" flag since we would need to use the conn_aa/ab flag here and thus not enter the loop again
+	    	}
+	    	else {
+	    		Rd_conn = 0;
+	    	}
+
+	    	// Test 6 - Type C to A Pullup Rp 56K - reqs ADC
+	    	// Configure CCx_CTRL Pins as Output Low
+		    GPIO_InitStruct.Pin = CC1_CTRL_Pin | CC2_CTRL_Pin;
+		    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		    GPIO_InitStruct.Pull = GPIO_NOPULL;
+		    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+		    HAL_GPIO_WritePin(GPIOA, CC1_CTRL_Pin | CC2_CTRL_Pin, GPIO_PIN_RESET);
+
+		    // DELETE AFTER TEST
+		    HAL_GPIO_WritePin(GPIOA, CC2_CTRL_Pin, GPIO_PIN_SET);
+		    // /delete
+
+	    	// Configure B_CCx_Sense Pins as analog
+	    	GPIO_InitStruct.Pin = B_CC1_SENSE_Pin | B_CC2_SENSE_Pin;
+	    	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	    	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	    	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	    	// Start ADC for B_CC1_Sense Pin PA4
+			sConfig.Channel = ADC_CHANNEL_4;
+			if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK){
+				Error_Handler();
+			}
+			HAL_ADC_Start(&hadc1); // restart since we stopped it earlier
+			// poll to read
+		    //analog_val1 = HAL_ADC_PollForConversion(&hadc1, 500U); // Example ADC reads with STLink 3.3V supply: LOW=130, Rp=500, HIGH=3000
+			analog_val1 = HAL_ADC_GetValue(&hadc1);
+			if (analog_val1 > RP_THRESH ) {
+				Rp_conn = 1;
+			}
+			else {
+				Rp_conn = 0;
+			}
+			// #here Rp sense in one direction
+
+	    	// Start ADC for B_CC2_Sense Pin PA5
+//			sConfig.Channel = ADC_CHANNEL_5;
+//			if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK){
+//				Error_Handler();
+//			}
+//		    analog_val2 = HAL_ADC_PollForConversion(&hadc1, 500U);
+//	    	// Set CC1_CTRL → LOW
+//	    	// Analog Read B_CC1_Sense
+//	    	// If > Rp_Thresh then Rp exists
+//	    	// Disable ADC when done
+//	    	// TODO - test with cable flipped on C side
+//			HAL_ADC_Stop(&hadc1);
 	    }
 
 
@@ -346,6 +461,11 @@ static void MX_ADC1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN ADC1_Init 2 */
+  // Custom Configuration for B_CC1_SENSE_Pin=PA4 and B_CC2_SENSE_Pin=PA5
+  // TODO/later Enable multiple scan mode
+//  hadc1.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
+//  hadc1.Init.NbrOfConversion = 2; // 2 channels
+//  hadc1.Init.DiscontinuousConvMode = DISABLE; // single conversion
 
   /* USER CODE END ADC1_Init 2 */
 
