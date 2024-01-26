@@ -81,21 +81,21 @@ static void ADC_Select04(void) {
 	  ADC_ChannelConfTypeDef sConfig = {0};
 
 	  sConfig.Channel = ADC_CHANNEL_4;
-	  sConfig.Rank = 1;
+	  sConfig.Rank = ADC_REGULAR_RANK_1;
 	  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
-
 	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
 	  {
 	    Error_Handler();
 	  }
 }
 
+
 static void ADC_Select05(void) {
 	  // Configure PA5
 	  ADC_ChannelConfTypeDef sConfig = {0};
 
 	  sConfig.Channel = ADC_CHANNEL_5;
-	  sConfig.Rank = 1;
+	  sConfig.Rank = ADC_REGULAR_RANK_1;
 	  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
 	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
 	  {
@@ -168,16 +168,16 @@ int main(void)
 	    vbus_conn = 0;
 	  }
 
+	  if (vbus_conn) {
+
 	  // ------ Section 3 - Test for USB C <> USB C --------
 	  // Test Requires: A_CC1 == HIGH & A_CC2_Pin, CCx_CTRL_PIN == LOW
 	  // Check B_CCx_Sense == A_CC1 with A_CC1 HIGH and all others LOW
 	  // TODO check A_CC1 is configured already in MX init
 	    // Configure A_CC1 as GPIO output HIGH
-	    __HAL_RCC_GPIOA_CLK_ENABLE();
-	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin|A_CC2_Pin|B_CC1_SENSE_Pin|B_CC2_SENSE_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET); // reset before config
+	    // HAL_GPIO_WritePin(GPIOA, A_CC1_Pin|A_CC2_Pin|B_CC1_SENSE_Pin|B_CC2_SENSE_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET); // reset before config
 	    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	    // Configure A_CC1 as Output HIGH
 	    GPIO_InitStruct.Pin = A_CC1_Pin;
 	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	    GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -195,7 +195,7 @@ int main(void)
 	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	    GPIO_InitStruct.Pull = GPIO_NOPULL;
 	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	    // pin already reset previously
+	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_RESET);
 	    // Test 3A STD>STD or STD>FLIP: if B_CCx_Sense is HIGH then it is connected to A_CC1
 	    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
 	    	cc_conn_aa = 1; // STD>STD is A_CC1→B_CC1
@@ -263,10 +263,11 @@ int main(void)
 
 	    // Test 5 & 6 - Type C to Type A or Type B Pullup or Pulldown
 	    // Only test if cc not connected
-	    if ( cc_conn_aa || cc_conn_ab || cc_conn_ba || cc_conn_bb == 0) {
+	    if ( (cc_conn_aa || cc_conn_ab || cc_conn_ba || cc_conn_bb) == 0) {
 	    	// Test 5 - Type C to B Pulldown 5K6
 	    	// Requires: SW2B CLOSED, A_CC1 INPUT PULLUP
 	    	// Result: If ACCx digital read is LOW then pulldown exists
+	    	// TODO fix bug with Rd toggling for USB C<>C after pulling out
 	    	if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
 	    		Rd_conn = 1;
 	    		// TODO/future also add a orientation test for the C side but it would require a seperate "is_usb_c-c" flag since we would need to use the conn_aa/ab flag here and thus not enter the loop again
@@ -303,8 +304,6 @@ int main(void)
 		    HAL_ADC_PollForConversion(&hadc1, 500U);
 			analog_val2 = HAL_ADC_GetValue(&hadc1); // Example ADC reads with STLink 3.3V supply: LOW=130, Rp=500, HIGH=3000
 			HAL_ADC_Stop(&hadc1);
-			// #here - only one side changes analog reads - probably getting the same analog read register
-			// see discontniuous mode https://community.st.com/t5/stm32cubemx-mcus/reading-multiple-adc-channel/td-p/171369
 
 			if ( (analog_val1 > RP_THRESH) || (analog_val2) > RP_THRESH ) {
 				Rp_conn = 1;
@@ -312,9 +311,6 @@ int main(void)
 			else {
 				Rp_conn = 0;
 			}
-
-
-			// #here Rp sense in one direction
 
 	  // ------ Section X - Drive LEDs -----------
 	  // Port A: [8..0] is p CC_Rp_LED_Pin CC_Rd_LED_Pin ... VBUS_LED_Pin GND_LED_Pin ]
@@ -332,14 +328,14 @@ int main(void)
 
 	  // set the outputs to the current value of the flags (note no mask)
 	  GPIOB->ODR = ((uint16_t)led_mask); // set bits 0 to 8
-	  //HAL_Delay(10);
-
+	  HAL_Delay(500);
+	    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
+  }
   /* USER CODE END 3 */
-}
 }
 
 /**
@@ -402,17 +398,19 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.LowPowerAutoPowerOff = DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.LowPowerAutoPowerOff = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_7CYCLES_5;
+  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_160CYCLES_5;
+  hadc1.Init.SamplingTimeCommon2 = ADC_SAMPLETIME_1CYCLE_5;
   hadc1.Init.OversamplingMode = DISABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -423,15 +421,8 @@ static void MX_ADC1_Init(void)
   /** Configure Regular Channel
   */
   sConfig.Channel = ADC_CHANNEL_4;
-  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_5;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
