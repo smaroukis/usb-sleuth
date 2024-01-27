@@ -57,7 +57,6 @@ uint8_t cc_conn_bb = 0;
 uint8_t Rp_conn = 0;
 uint8_t Rd_conn = 0;
 uint8_t Ra_conn = 0;
-uint8_t flag_firstrun = 1;
 uint16_t RP_THRESH = 400;
 int analog_val1;
 int analog_val2;
@@ -146,29 +145,67 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  // #bug ground LED "latches" on  →Need to set GND_Sense as pullup each time?
+	  // ------ Section X - Drive LEDs based on previous loop -----------
+	  // Port A: [8..0] is p CC_Rp_LED_Pin CC_Rd_LED_Pin ... VBUS_LED_Pin GND_LED_Pin ]
+	  uint16_t led_mask = (
+			  gnd_conn << 0 |
+			  vbus_conn << 1 |
+			  cc_conn_aa << 2 |
+			  cc_conn_ab << 3 |
+			  cc_conn_bb << 4 |
+			  cc_conn_ba << 5 |
+			  Ra_conn << 6 |
+			  Rd_conn << 7 |
+			  Rp_conn << 8
+			  );
 
-	  // ------ Section 1 - Testing Ground Line ---------
-	  // Requires: GND_SENSE pin as pullup input, SW2B == CLOSED (B_GND_B1 → GND)
-	  // Check if the A side ground pin is pulled to ground (short), else HIGH via internal Rp
-	  if (HAL_GPIO_ReadPin(GPIOA, GND_SENSE_Pin) == GPIO_PIN_RESET) {
-		  gnd_conn = 1;
-	  }
-	  else {
-		  gnd_conn = 0;
-	  }
+	  // set the outputs to the current value of the flags (note no mask)
+	  GPIOB->ODR = ((uint16_t)led_mask); // set bits 0 to 8
+	  //HAL_Delay(20);
 
-	  // ------ Section 2 - Testing VBUS Line ---------
+	  // Reset flags for "single path" through code
+	  gnd_conn = 0;
+	  vbus_conn = 0;
+	  cc_conn_aa = 0;
+	  cc_conn_ab = 0;
+	  cc_conn_ba = 0;
+	  cc_conn_bb = 0;
+	  Rp_conn = 0;
+	  Rd_conn = 0;
+	  Ra_conn = 0;
+
+	  // ------ Section 1 - Testing VBUS Line ---------
 	  // Requires: SW2A == Closed (VBUS_A4 → VDD via 2K)
 	  // B_VBUS is pulled up to Vdd via 2K; A_VBUS_SENSE is pulled down via 10K; Vsense = 10K/12K = HIGH
 	  if (HAL_GPIO_ReadPin(GPIOA, VBUS_SENSE_Pin) == GPIO_PIN_SET ) {
 	    vbus_conn = 1;
+	    HAL_Delay(300); // to allow plug to fully seat
 	  }
 	  else {
 	    vbus_conn = 0;
+	    // Now check for ground in the case that VBUS wire is damaged and we still want to test the others
+	    // Note cable physical properties assures that ground connection is made before VBUS so no need for delay before reading GND_SENSE_Pin
+	    if (HAL_GPIO_ReadPin(GPIOA, GND_SENSE_Pin) == GPIO_PIN_RESET) {
+	    	HAL_Delay(300); // to let the other pins set since GND is first
+	    	// proceed with other tests (note we set the gnd_conn flag below for passed test)
+	    }
+	    else {
+	    	gnd_conn = 0;
+	    	continue; // if VBUS_SENSE_Pin and GND_SENSE_Pin == 0 then restart the loop (flags will be reset after additional cycle)
+	    }
+
 	  }
 
-	  if (vbus_conn) {
+	  // ------ Section 2 - Testing Ground Line ---------
+	  // Requires: GND_SENSE pin as pullup input, SW2B == CLOSED (B_GND_B1 → GND)
+	  // Check if the A side ground pin is pulled to ground (short), else HIGH via internal Rp
+	  if (HAL_GPIO_ReadPin(GPIOA, GND_SENSE_Pin) == GPIO_PIN_RESET) {
+		  gnd_conn = 1;
+
+	  }
+	  else {
+		  gnd_conn = 0;
+	  }
 
 	  // ------ Section 3 - Test for USB C <> USB C --------
 	  // Test Requires: A_CC1 == HIGH & A_CC2_Pin, CCx_CTRL_PIN == LOW
@@ -268,8 +305,12 @@ int main(void)
 	    	// Requires: SW2B CLOSED, A_CC1 INPUT PULLUP
 	    	// Result: If ACCx digital read is LOW then pulldown exists
 	    	// TODO fix bug with Rd toggling for USB C<>C after pulling out
+	    	// #here need better logic for testing Rd - USB C<>C also pulled down VCONN→GND
+	    		// when USB C touches sheath, creates a path to ground from CC1/2 through Rd
+	    		// need to disable testing until VCONN is connected (but allow for LED reset)
 	    	if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
 	    		Rd_conn = 1;
+
 	    		// TODO/future also add a orientation test for the C side but it would require a seperate "is_usb_c-c" flag since we would need to use the conn_aa/ab flag here and thus not enter the loop again
 	    	}
 	    	else {
@@ -311,25 +352,6 @@ int main(void)
 			else {
 				Rp_conn = 0;
 			}
-
-	  // ------ Section X - Drive LEDs -----------
-	  // Port A: [8..0] is p CC_Rp_LED_Pin CC_Rd_LED_Pin ... VBUS_LED_Pin GND_LED_Pin ]
-	  uint16_t led_mask = (
-			  gnd_conn << 0 |
-			  vbus_conn << 1 |
-			  cc_conn_aa << 2 |
-			  cc_conn_ab << 3 |
-			  cc_conn_bb << 4 |
-			  cc_conn_ba << 5 |
-			  Ra_conn << 6 |
-			  Rd_conn << 7 |
-			  Rp_conn << 8
-			  );
-
-	  // set the outputs to the current value of the flags (note no mask)
-	  GPIOB->ODR = ((uint16_t)led_mask); // set bits 0 to 8
-	  HAL_Delay(500);
-	    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
