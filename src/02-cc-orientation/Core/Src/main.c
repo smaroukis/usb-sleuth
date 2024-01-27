@@ -233,12 +233,14 @@ int main(void)
 	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	    HAL_GPIO_WritePin(GPIOA, CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET);
 
-	    // "Entry Test" With both A_CC1 & A_CC2 HIGH & B_CCx_CTRL LOW, one of B_CCx_SENSE should come HIGH
+	    // "Entry Test" for C<>C With both A_CC1 & A_CC2 HIGH & B_CCx_CTRL LOW, one of B_CCx_SENSE should come HIGH
 	    // Note this also works for the case that Rp is present since Rp is weak, the CTRL pulldown will override (since the pin won't be connected through to the A_CCx side)
 	    if ( (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) || (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) ) {
 	    	// continue with CC orientation test
 	    	// #here Orientation test not fully working - A side doesn't go to "flip" when flipped
 		    // Test 3A with A_CC1 HIGH, STD>STD or STD>FLIP: if B_CCx_Sense is HIGH then it is connected to A_CC1
+	    	// now pull A_CC2 LOW to test A_CC1 connection
+	    	HAL_GPIO_WritePin(GPIOA, A_CC2_Pin, GPIO_PIN_RESET);
 		    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
 		    	cc_conn_aa = 1; // STD>STD is A_CC1→B_CC1
 		    }
@@ -247,6 +249,7 @@ int main(void)
 		    	// Check for connection from A_CC1 to B_CC2
 			    if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
 			    	cc_conn_ab = 1; // STD>FLIP is A_CC1→B_CC2
+			    	// #here we never get past here?
 			    }
 			    else {
 			    	cc_conn_ab = 0;
