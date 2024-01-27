@@ -288,12 +288,28 @@ int main(void)
 			GPIO_InitStruct.Pull = GPIO_NOPULL;
 			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 			HAL_GPIO_WritePin(GPIOA, CC1_CTRL_Pin | CC2_CTRL_Pin, GPIO_PIN_SET); // open drain high is floating
-			if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
-				Ra_conn = 1;
+
+			if ( cc_conn_aa || cc_conn_ab ) {
+				// A_CC1 side is CC pin, so A_CC2 must be VCONN
+				if ( (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
+					Ra_conn = 1;
+				}
+				else {
+					Ra_conn = 0;
+				}
+			}
+			else if ( cc_conn_ba || cc_conn_bb ) {
+				// A_CC2 side is CC pin so A_CC1 must be VCONN
+				if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) ) {
+					Ra_conn = 1;
+				}
+				else {
+					Ra_conn = 0;
+				}
 			}
 			else {
-				Ra_conn = 0;
-			}
+					Ra_conn = 0;
+				}
 
 		    // end active cable test
 	    }
