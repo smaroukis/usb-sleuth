@@ -210,87 +210,98 @@ int main(void)
 	  // ------ Section 3 - Test for USB C <> USB C --------
 	  // Test Requires: A_CC1 == HIGH & A_CC2_Pin, CCx_CTRL_PIN == LOW
 	  // Check B_CCx_Sense == A_CC1 with A_CC1 HIGH and all others LOW
-	  // TODO check A_CC1 is configured already in MX init
 	    // Configure A_CC1 as GPIO output HIGH
 	    // HAL_GPIO_WritePin(GPIOA, A_CC1_Pin|A_CC2_Pin|B_CC1_SENSE_Pin|B_CC2_SENSE_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET); // reset before config
 	    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-	    GPIO_InitStruct.Pin = A_CC1_Pin;
+	    GPIO_InitStruct.Pin = A_CC1_Pin | A_CC2_Pin;
 	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	    GPIO_InitStruct.Pull = GPIO_NOPULL;
 	    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_SET); // A_CC1 → HIGH
+	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin | A_CC2_Pin, GPIO_PIN_SET); // A_CC1 & A_CC2 → HIGH for C<>C check
 
 	    // Configure B_CCx_Sense pins as floating inputs
 	    GPIO_InitStruct.Pin = B_CC1_SENSE_Pin | B_CC2_SENSE_Pin;
 	    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 	    GPIO_InitStruct.Pull = GPIO_NOPULL;
 	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	    // Configure pins as output LOW (A_CC2, CCx_CTRL)
-	    GPIO_InitStruct.Pin = (A_CC2_Pin|CC1_CTRL_Pin|CC2_CTRL_Pin);
+	    // Configure CCx_CTRL pins as output LOW
+	    GPIO_InitStruct.Pin = (CC1_CTRL_Pin|CC2_CTRL_Pin);
 	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	    GPIO_InitStruct.Pull = GPIO_NOPULL;
 	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_RESET);
-	    // Test 3A STD>STD or STD>FLIP: if B_CCx_Sense is HIGH then it is connected to A_CC1
-	    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
-	    	cc_conn_aa = 1; // STD>STD is A_CC1→B_CC1
+	    HAL_GPIO_WritePin(GPIOA, CC1_CTRL_Pin|CC2_CTRL_Pin, GPIO_PIN_RESET);
+
+	    // "Entry Test" With both A_CC1 & A_CC2 HIGH & B_CCx_CTRL LOW, one of B_CCx_SENSE should come HIGH
+	    // Note this also works for the case that Rp is present since Rp is weak, the CTRL pulldown will override (since the pin won't be connected through to the A_CCx side)
+	    if ( (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) || (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) ) {
+	    	// continue with CC orientation test
+	    	// #here Orientation test not fully working - A side doesn't go to "flip" when flipped
+		    // Test 3A with A_CC1 HIGH, STD>STD or STD>FLIP: if B_CCx_Sense is HIGH then it is connected to A_CC1
+		    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
+		    	cc_conn_aa = 1; // STD>STD is A_CC1→B_CC1
+		    }
+		    else {
+		    	cc_conn_aa = 0;
+		    	// Check for connection from A_CC1 to B_CC2
+			    if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
+			    	cc_conn_ab = 1; // STD>FLIP is A_CC1→B_CC2
+			    }
+			    else {
+			    	cc_conn_ab = 0;
+			    	// Could be due to A_CC1 connected to VCONN and pulled down via Active Cable, so check with A_CC2 HIGH
+				    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_RESET);
+				    HAL_GPIO_WritePin(GPIOA, A_CC2_Pin, GPIO_PIN_SET);
+				    // with A_CC2 HIGH check B_CC1_Sense (conn_ba)
+				    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
+				    	cc_conn_ba = 1; // A_CC2 → B_CC1 is Flip>Std or conn_ba
+				    }
+				    else {
+				    	cc_conn_ba = 0;
+				    	// with A_CC2 HIGH check B_CC2_Sense (conn_bb or Flip>Flip)
+				    	if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
+				    		cc_conn_bb = 1;
+				    	}
+				    	else {
+				    		cc_conn_bb = 0;
+				    	}
+				    }
+			    }
+		    }
+	    	// end CC orientation test
+
+		    // begin active cable test
+		    // ------- Section 4: Test Active Cable (E Marker) ------
+		    // If we set A_CC1 & A_CC2 as input pullup and read A_CCx, if one is LOW then there is Ra pulldown
+		    // Note set the CCx CTRL pins to floating
+		    // Requires: A_CCx as INPUT_PULLUP, CCx_CTRL as floating
+		    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
+		    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		    GPIO_InitStruct.Pull = GPIO_PULLUP;
+		    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+		    GPIO_InitStruct.Pin = CC1_CTRL_Pin | CC2_CTRL_Pin;
+			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+			GPIO_InitStruct.Pull = GPIO_NOPULL;
+			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+			HAL_GPIO_WritePin(GPIOA, CC1_CTRL_Pin | CC2_CTRL_Pin, GPIO_PIN_SET); // open drain high is floating
+			if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
+				Ra_conn = 1;
+			}
+			else {
+				Ra_conn = 0;
+			}
+
+		    // end active cable test
 	    }
 	    else {
+	    	// not a C<>C cable
 	    	cc_conn_aa = 0;
-	    }
-	    if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
-	    	cc_conn_ab = 1; // STD>FLIP is A_CC1→B_CC2
-	    }
-	    else {
 	    	cc_conn_ab = 0;
-	    }
-	    // TEST 3B FLIP>STD or FLIP>FLIP: with A_CC2 HIGH if B_CCx_Sense HIGH then → A_CC2
-	    // Requires: Set pins = [ACC2], RESET = [A_CC1, CCx_CTRL]
-	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin, GPIO_PIN_RESET);
-	    HAL_GPIO_WritePin(GPIOA, A_CC2_Pin, GPIO_PIN_SET);
-	    if (HAL_GPIO_ReadPin(GPIOA, B_CC1_SENSE_Pin) == 1) {
-	    	cc_conn_ba = 1; // A_CC2→B_CC1 is FLIP>STD
-	    }
-	    else {
+	    	cc_conn_bb = 0;
 	    	cc_conn_ba = 0;
 	    }
-	    if (HAL_GPIO_ReadPin(GPIOA, B_CC2_SENSE_Pin) == 1) {
-	    	cc_conn_bb = 1; // A_CC2→B_CC2 is FLIP>FLIP
-	    }
-	    else {
-	    	cc_conn_bb = 0;
-	    }
 
-	    // ------- Section 4: Test Active Cable (E Marker) ------
-
-	    // Test 4: Assuming aa or ab then we know VCONN would be on A_CC2
-	    // Requires: A_CC2 as INPUT_PULLUP
-	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
-	    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	    GPIO_InitStruct.Pull = GPIO_PULLUP;
-	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	    //
-	    if ( cc_conn_aa || cc_conn_ab ) {
-	    	if (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) {
-	    		Ra_conn = 1; // if pulled to ground then active cable
-	    	}
-	    	else {
-	    		Ra_conn = 0; // if we get here then it is missing
-	    	}
-	    }
-	    else if ( cc_conn_bb || cc_conn_ba ) {
-	    	if (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) {
-	    		Ra_conn = 1;
-	    	}
-	    	else {
-	    		Ra_conn = 0;
-	    	}
-	    }
-	    else {
-	    	Ra_conn = 0;
-	    }
 	    // Set A side back to output -- TODO delete if dont' need
 //	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
 //	    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT;
@@ -304,8 +315,6 @@ int main(void)
 	    	// Test 5 - Type C to B Pulldown 5K6
 	    	// Requires: SW2B CLOSED, A_CC1 INPUT PULLUP
 	    	// Result: If ACCx digital read is LOW then pulldown exists
-	    	// TODO fix bug with Rd toggling for USB C<>C after pulling out
-	    	// #here need better logic for testing Rd - USB C<>C also pulled down VCONN→GND
 	    		// when USB C touches sheath, creates a path to ground from CC1/2 through Rd
 	    		// need to disable testing until VCONN is connected (but allow for LED reset)
 	    	if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
