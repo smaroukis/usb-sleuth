@@ -57,7 +57,7 @@ uint8_t cc_conn_bb = 0;
 uint8_t Rp_conn = 0;
 uint8_t Rd_conn = 0;
 uint8_t Ra_conn = 0;
-uint16_t RP_THRESH = 400;
+uint16_t RP_THRESH = 300; // adjust for analog read
 int analog_val1;
 int analog_val2;
 
@@ -283,6 +283,7 @@ int main(void)
 		    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		    GPIO_InitStruct.Pull = GPIO_PULLUP;
 		    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 		    GPIO_InitStruct.Pin = CC1_CTRL_Pin | CC2_CTRL_Pin;
 			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 			GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -320,6 +321,7 @@ int main(void)
 	    	cc_conn_bb = 0;
 	    	cc_conn_ba = 0;
 	    }
+	    // Reset Pins
 
 	    // Set A side back to output -- TODO delete if dont' need
 //	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
@@ -329,17 +331,17 @@ int main(void)
 //	    HAL_GPIO_WritePin(GPIOA, A_CC1_Pin | A_CC2_Pin, GPIO_PIN_RESET);
 
 	    // Test 5 & 6 - Type C to Type A or Type B Pullup or Pulldown
-	    // Only test if cc not connected
+
+	    GPIO_InitStruct.Pin = A_CC2_Pin | A_CC1_Pin;
+	    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	    GPIO_InitStruct.Pull = GPIO_PULLUP;
+	    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	    // Only test if not C<>C
 	    if ( (cc_conn_aa || cc_conn_ab || cc_conn_ba || cc_conn_bb) == 0) {
 	    	// Test 5 - Type C to B Pulldown 5K6
-	    	// Requires: SW2B CLOSED, A_CC1 INPUT PULLUP
 	    	// Result: If ACCx digital read is LOW then pulldown exists
-	    		// when USB C touches sheath, creates a path to ground from CC1/2 through Rd
-	    		// need to disable testing until VCONN is connected (but allow for LED reset)
 	    	if ( (HAL_GPIO_ReadPin(GPIOA, A_CC1_Pin) == 0) || (HAL_GPIO_ReadPin(GPIOA, A_CC2_Pin) == 0) ) {
 	    		Rd_conn = 1;
-
-	    		// TODO/future also add a orientation test for the C side but it would require a seperate "is_usb_c-c" flag since we would need to use the conn_aa/ab flag here and thus not enter the loop again
 	    	}
 	    	else {
 	    		Rd_conn = 0;
