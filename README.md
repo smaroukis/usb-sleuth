@@ -1,6 +1,6 @@
 ## Overview
 
-The device tests for continuity and internal resistors within various USB Cables and exposes some pins for multimeter testing. 
+The device tests for continuity and internal resistors within various USB Cables and exposes some pins for multimeter testing. The project is a hardware fork of [aroerina/LimePulse](https://github.com/aroerina/LimePulse_USB_cable_checker/) that I decided to reverse engineer and write the firmware for.
 
 A STM32C031K6T microcontroller is used for testing connection and orientation, powered by a CR2032 battery. Code is given using STM32 HAL libraries and the device can being programmed over SWD. 
 
@@ -66,7 +66,7 @@ The device can also be reset by shorting out the `nRESET` line to `GND` (pins 1 
 
 ## Sensing VBUS and GND 
 
-> [!NOTE] Summary: 
+> [!NOTE]
 > `VBUS`: Pulled up on B-side to VDD via 2K, pulled down to ground at A-side MCU input sense pin via 10K. Sense pin reads high if VBUS line is continuous through the cable.
 > `GND`: B-side receptacle ground pin connected to board ground, A-side receptacle pin is direct to input sense pin.
 
@@ -115,7 +115,8 @@ We simply configure the `A_CC2` and `B_CC2` pins as `INPUT_PULLUP`s and test if 
 
 ## MCU Testing of Rp on Type-A to Type-C Cable
 
-> Note is programmed to work for both CC configurations
+> [!NOTE]
+> It is programmed to work for both USB-C plug orientations
 
 Setup
 1. `VBUS` is connected to `VCC` through a 2K resistor (ignored for the calculations below)
@@ -123,7 +124,8 @@ Setup
 3. Perform analog read of `B_CC1_sense` and `B_CC2_SENSE`
 4. If the analog read is above a threshold, `RP_THRESH`, to account for ground noise, then the 56K Rp pullup exists. 
 
-> [!tip] An analog read is required since the internal Rp is weak enough such that it doesn't pull it all the way up to the digital `HIGH` threshold
+> [!TIP]
+> An analog read is required since the internal Rp is weak enough such that it doesn't pull it all the way up to the digital `HIGH` threshold
 
 ![](attachments/aefe45b3f9a0bc993c61063e45c14476.jpg)
 
@@ -265,4 +267,4 @@ And here is for the Type-C to 2.0 Micro-B:
 **Inspired By**
 - https://github.com/petl/USB-C-cable-tester-C2C-caberQU
 - https://github.com/alvarop/usb_c_cable_tester
-- https://github.com/aroerina/LimePulse_USB_cable_checker/ - original inspiration for the design from its professional quality layout
+- https://github.com/aroerina/LimePulse_USB_cable_checker/ - original inspiration for the design and functionality from its professional quality layout
