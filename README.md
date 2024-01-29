@@ -1,35 +1,54 @@
-parent::[p-usb-sleuth-🕵️](p-usb-sleuth-%F0%9F%95%B5%EF%B8%8F.md)
+## Overview
 
-# Overview
+The device tests for continuity and internal resistors within various USB Cables and exposes some pins for multimeter testing. 
 
-The device tests for continuity within USB cables for USB 2.0, 3.0, and 3.1 pinouts. A STM32C031K6T microcontroller is used for testing connection and orientation of certain pins, and others are simple continuity tests.
+A STM32C031K6T microcontroller is used for testing connection and orientation, powered by a CR2032 battery. Code is given using STM32 HAL libraries and the device can being programmed over SWD. 
 
-This USB cable tester has the "B" side on the right, and the "A" side on the left.
+KiCad and gerber files are provided for the board layout, as well as the library footprints for non-standard parts ordered from JLCPCB/LCSC. 
+See the [BOM](/production/38-04-usb-tester_2023-12-18_rev1/bom.csv).
 
-![](attachments/7ca73ec73e6ef657711e2b53d82c85f6.png)
+This USB cable tester has the "B" side on the right, and the "A" side on the left. Receptacles are given for the following:
+- Type-C (both sides) 
+- Type-C to A 
+- Type-C to micro B (2.0)
+- Type-C to mini B 
+
+![](attachments/15a9a8f0b7c9e3b582dff5a387cdef28.png)
 
 The device has some benefits over a simple continuity tester
-- detecting orientation of the USB-C cable
-- detecting pullup and pulldown resistors on the CC and VCONN lines
-- USB-compliant: This device doesn't apply a +V to the Ground line/pin, instead it uses a MCU to test the presence of a connected ground wire
-- various pins are exposed to test cable and/or pullup/pulldown resistances directly with a DMM
+- displays the as-plugged orientation of the 4 different possibilities of the USB-C to C cable
+- detects pullup and pulldown resistors on the CC lines as required by the USB standard for legacy cables 
+- identifies active cable with E marker (via the pulldown resistor present on VCONN)
+- doesn't apply a +V to the Ground line/pin, instead it uses a MCU to test the presence of a connected ground wire
+- exposes various pins to test cable and internal resistors manually with a DMM
 
-> [!CAUTION] 
-> Note for correct continuity testing of the USB3.1 pins, the cable should be in the CC orientation of either `STD>STD` or `FLIP>FLIP`. See on-board LEDs for configuration.
+## Example Tests
 
-## General Layout and Operation
+#### USB C-C Active Cable
+![](attachments/2c613b88e83b5b3001c98a28d16cfa16.jpg)
+> Note in this test only one of the USB 2.0 Data pair LEDs will light up depending on the cable orientation, showing that the two pairs are not connected inside the cable (the pairs are also not connected on the PCB). The user must flip the orientation to test both data pairs. 
+#### DMM Test of Internal Resistor
+
+Testing the value of the pulldown resistor on an active cable by measuring between `B_CC2` and `B_GND` (should be between 800-1.2K Ohms).
+![](attachments/8abf4eecb1f8d3a4a280e613c7c6c648.jpg)
+
+#### OTG Test
+
+![](attachments/399ec01886c9eeec7602fb5a752dc945.jpg)
+
+## General PCB Layout
 
 Layout
 - Various B side pins are biased to VBUS through pullup resistors. A side pins are either connected to ground through an LED, thus lighting up if the corresponding wire is continuous, or the pins are connected into the MCU for inputs. These pins that the MCU tests for are as follows:
 - Ground (note all four GND pins are tied together)
-- V_bus (note all four VBUS pins are tied together)
-- CC1 to test for CC line
+- VBUS (note all four VBUS pins are tied together)
+- CC1 to test for CC line and orientation
 - CC2 to test for VCONN line and pull down resistor for active cables, as well as a flipped CC cable
 
 > Note: Both A-side and B-side CC1 and CC2 pins are tapped off into corresponding control inputs to the MCU through a resistor, allowing for pulling the control pins high or low to sense the result on the opposite side.
 
 Simplified layout of testing CC1 pin.
-![](attachments/fd46faa0f7ca6710911e1b0df0ea281a.jpg)
+![](attachments/8807fc3380197edfb7fe4b0e16bcb84a.jpg)
 
 ## Programming and Reset
 
@@ -43,106 +62,93 @@ The device can also be reset by shorting out the `nRESET` line to `GND` (pins 1 
 > [!NOTE]
 > For the `SWD` pins we need pullup or pulldown resistors on `SWDIO` and `SDCLK` respectively. These are provided internally by the STM32 MCU, but if there is an issue with the debugger try adding an external weak pulllup and pulldown (10K-100K).
 
-# Detailed Description of Operation
+# Description of Operation
 
 ## Sensing VBUS and GND 
 
-All VBUS pins are tied together and tested via a pulldown resistor on the MCU. 
+> [!NOTE] Summary: 
+> `VBUS`: Pulled up on B-side to VDD via 2K, pulled down to ground at A-side MCU input sense pin via 10K. Sense pin reads high if VBUS line is continuous through the cable.
+> `GND`: B-side receptacle ground pin connected to board ground, A-side receptacle pin is direct to input sense pin.
 
-B-side receptacle pins are pulled up to VDD through resistors. 
+All VBUS pins are tied together and tested via a pulldown resistor on the MCU (similarly for GND pins).
+
+Most B-side receptacle pins are pulled up to supply/VDD through resistors with exception for CC pins and Ground. B-side ground is connected to board ground through a DIP switch for isolation from the MCU ground if needed.
 ![](attachments/23046ae691bb28dd70a94b5c6b8f0091.png)
 
-A-side receptacle pins are 
+A-side receptacle pins are connected to the MCU input for sensing.
 ![](attachments/d96cb615de5e9da57af79df1d971963b.png)
 
-This passes through a isolation switch
+`A_VBUS`/`A_GND` and connected to `VBUS_SENSE`/`GND_SENSE` inputs to the MCU through DIP switches for isolation from the MCU during DMM testing.
 
-> [!NOTE] 
-> The testing pad is on the receptacle side to isolate us from the MCU for DMM testing.
+![](attachments/14ac04579e13106a5ab4d05028cf1c55.png)
 
-![](attachments/e6f2bf36035e5b84bac7dedea9d4b03d.png)
+`VBUS_SENSE` pin is an input to the MCU with a pull down resistor forming a voltage divider with the 2K VDD pulllup resistor. If the `VBUS` line is discontinuous, the pin reads `LOW`. If `VBUS` is continuous then the pin reads `VCC`x10/12, or digital `HIGH`. 
 
-`VBUS_SENS` pin is an input to the MCU with a pull down resistor forming a voltage divider with the 2K VDD pulllup resistor. If the `VBUS` line is discontinuous, the pin reads `LOW`. If `VBUS` is continuous then the pin reads `VCC`x10/12, or digital `HIGH`. 
+Indicator LEDs are driven by the MCU outputs `GND_LED` and `VBUS_LED`.
 
-Output LEDs are driven by the MCU outputs `GND_LED` and `VBUS_LED`
+![](attachments/c21a4f97c91e7ab958938bb7a07a2664.png)
 
-![](attachments/20a86989679f225854fb530f1797ebc5.png)
+# MCU Testing Logic
 
-> [!NOTE]
-> This is why the "stronger" 2K pullup is needed, to only drop a voltage of VCCx2/(2+10), which is negligible in the digital logic sense→ [Pullup Resistors](Pullup%20Resistors.md)
-
-## Sensing CC Orientation for USB-C
+### Orientation of CC Pin
 
 Here is the type-C receptacle pinout 
 ![](attachments/6c7a202aad09ab28bc2ce7d4dda5e6cc.png)
 > Source: "USB 2.0 Type-C Plug Pin-Out" https://ww1.microchip.com/downloads/en/appnotes/00001953a.pdf
 
-Possible orientations of USB-C Plug.
-![ 200](IMG_6318.jpg%20)
+Possible orientations of USB-C Plug. 
+![](attachments/bc354e37b124c5be5b213e8b639226ea.png)
+> Note Ra is for the active pulldown emarker, but don't take this "straight through" configuration literally as there are diodes preventing shorting of the pins.
 
 Simplified PCB layout:
-![](attachments/fd46faa0f7ca6710911e1b0df0ea281a.jpg)
+![](attachments/8807fc3380197edfb7fe4b0e16bcb84a.jpg)
 
-Testing Procedure
-1. Apply test voltage to `A_CC1`:
-	1. `CC1_CTRL` → `LOW` and `A_CC1` → `HIGH` and `A_CC2` → `LOW`
-	2. `CC2_CTRL` → `LOW` (and `B_CC1` → `LOW` or Open)
-	3. If `B_CC1` or `B_CC2` is `HIGH`, then this is the pin that `A_CC1` is connected to. 
-	4. If neither are `HIGH` we are connected to `VCONN`, so apply test voltage to `A_CC2`
-2. Apply test voltage to `A_CC2`:
-	1. (same as above but pins swapped)
- 
+We can determine that a C-C type cable is connected by pulling both A_CC1 and A_CC2 HIGH and CCx_CTRL pins LOW, then looking for one of the B_CCx pins coming HIGH.
 
-# MCU Testing Logic 
-
-## MCU Testing of Rp on Type-A to Type-C Cable
-
-Setup
-- `VBUS` is connected to `VCC` through a 2K resistor (ignored for the calculations below)
-
-MCU Procedure
-1. Write `CC1_CTRL` and `CC2_CTRL` → `LOW` (pulls `B_CC1` pin `LOW` through 10K R)
-2. Perform analog read of `B_CC1_Sens` and `B_CC2_Sens`
-3. If the analog read is above ground (and any noise), then the pullup exists. (Otherwise the pin is pulled down with no current path, so straight to 0V)
-
-> [!tip] An analog read is required since the value of Rp is large enough such that it doesn't pull it all the way up to the digital `HIGH` threshold
-
-![](attachments/e3cffc83784986d4a272780f084790a6.jpg)
-
-
-> [!NOTE]- Aside - The effect of the 10K pulldown on VBUS
-> - With both the strapping (pulldown) resistor on VBUS and the 2K input resistor, the effect is the voltage at the sense pin is reduced by 20%, or from 0.5V to 0.41
-> - ![](attachments/db5ead3c749eac210114567b674e829a.jpg)
-
-## MCU Testing of Rd on Type-B to Type-C Cable
-
-> This works for both CC configurations
-
-1. Set `A_CC1` and `A_CC2` as `INPUT_PULLUP` (~50K internal pullup)
-2. Read `A_CC1` and `A_CC2`, if either are pulled `LOW`, then it means that `Rp` is present (Rp = 5K6 which is much stronger than the 50K internal pullup)
-
-![](attachments/dd959de04ef8304902529b81821b52ff.jpg)
-
-
-## MCU Testing of Ra on Emarker (Active) Cables
+### MCU Testing of Ra on Emarker (Active) Cables
 
 The pulldown (Ra, for "active") is nominally 800-1.2K. Connection is as follows:
 
-![](attachments/9af4e6435ac2a8d08bfff3ad94294580.jpg)
+![](attachments/0e9d828f5b77ce084cd1109bc847be37.png)
 
-We simply configure the `A_CC2` and `B_CC2` pins as `INPUT_PULLUP`s and test if these lines (the `VCONN` line) are pulled low (normally it is open).
+We simply configure the `A_CC2` and `B_CC2` pins as `INPUT_PULLUP`s and test if these lines (the `VCONN` line) are pulled low (normally it is open), since the pulldown Ra is strong at ~1K.
+
+## MCU Testing of Rp on Type-A to Type-C Cable
+
+> Note is programmed to work for both CC configurations
+
+Setup
+1. `VBUS` is connected to `VCC` through a 2K resistor (ignored for the calculations below)
+2. Write `CC1_CTRL` and `CC2_CTRL` → `LOW` (pulls `B_CCx` pin toward ground through 10K R)
+3. Perform analog read of `B_CC1_sense` and `B_CC2_SENSE`
+4. If the analog read is above a threshold, `RP_THRESH`, to account for ground noise, then the 56K Rp pullup exists. 
+
+> [!tip] An analog read is required since the internal Rp is weak enough such that it doesn't pull it all the way up to the digital `HIGH` threshold
+
+![](attachments/aefe45b3f9a0bc993c61063e45c14476.jpg)
+
+## MCU Testing of Rd on Type-B to Type-C Cable
+
+> Note this works for both CC configurations
+
+1. Set `A_CC1` as `INPUT_PULLUP` (~50K internal pullup)
+2. Read `A_CC1`, if pulled `LOW`, then it means that `Rp` is present (Rd = 5K which is much stronger than the 50K internal pullup)
+
+![](attachments/c23799f6474e13270b512d4f3786afff.jpg)
 
 ## Power Isolation For Testing
 
 Isolation switches are provided to isolate the DMM from the MCU as it injects a test current to measure resistance, and also to allow us to measure the resistance of the cable itself (e.g. VBUS to GND). 
 
-![](attachments/987dbb1085ee2e46e8d61a343790b8d4.png)
+> Note during testing it was found that even with the switches closed the DMM measurements weren't affected.  
+
+![](attachments/353a3f5ac6297547e94ec1c9a1bd314e.jpg)
 
 In the schematic these are modeled as a multi-unit DIP switch:
 - `SW2A`: Separates `VCC` from `VBUS`
 - `SW2B`: Separates `B_GND` from `GND`
-- `SW2C`: Separates `A_GND` from `A_GND_SENS` (input to MCU)
-- `SW2D`: Separates `A_VBUS` from `A_VBUS_SENS` (input to MCU)
+- `SW2C`: Separates `A_GND` from `A_GND_SENSE` (input to MCU)
+- `SW2D`: Separates `A_VBUS` from `A_VBUS_SENSE` (input to MCU)
 
 # DMM Testing
 
@@ -150,7 +156,7 @@ In the schematic these are modeled as a multi-unit DIP switch:
 
 > [!Caution]
 > Verify the following:
-> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding.
+> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding (or note the configuration to choose the correct pad to test)
 > 2. All DIP switches are in the OFF position
 > 3. Power switch is in the OFF position
 
@@ -166,7 +172,7 @@ We can test the exact value of this resistor by using a DMM between `B_VBUS` and
 
 > [!Caution]
 > Verify the following:
-> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding.
+> 1. USB cable is in the normal CC Orientation of `STD>STD` before proceeding (or note the configuration to choose the correct pad to test)
 > 2. All DIP switches are in the OFF position
 > 3. Power switch is in the OFF position
 
@@ -177,9 +183,6 @@ We can test the exact value of this resistor by using a DMM between
 
 ![](attachments/dd959de04ef8304902529b81821b52ff.jpg)
 
-> [!NOTE]
-> Note we don't need an isolation switch from the MCU on the `A_CC1` side since we have isolated both `B_GND` and `A_GND` sides
-
 ![](attachments/94c0012adc95f0ae4bc2b46290270886.png)
 
 
@@ -188,16 +191,14 @@ We can test the exact value of this resistor by using a DMM between
 1. With device ON, make sure the CC orientation is `STD>STD`
 2. Switch isolation switches to OFF
 3. Switch power OFF
-4. Place a DMM between `B_CC2` and `B_GND`
-
-![](attachments/9af4e6435ac2a8d08bfff3ad94294580.jpg)
-
-
+4. Place a DMM between `B_CC2` and `B_GND` since the Ra will be on the VCONN line.
 
 # Shields and ID Pin
 
 ### Shields 
 Shields are connected together and exposed to a through hole testing terminal. For this we can test with a multimeter. 
+
+Note the shield and ground are connected inside the receptacle.
 
 ![](attachments/2b07e833febe36b907b043b7ab4327f7.png)
 
@@ -205,14 +206,13 @@ Shields are connected together and exposed to a through hole testing terminal. F
 
 ![](attachments/b944048f96f1d5d21e1134ee56ce65bc.png)
 
-
-
 ### ID (On The Go / OTG)
 
 The OTG specification allows a USB device normally acting as a peripheral, to now act as a host (example use case: a tablet normally a peripheral, acting as a host can read from removable media on a flash drive)
 
 For the OTG cable the A-plug side ties its ID pin to ground, and the B-plug side leaves it floating.  
-![](attachments/018765bb8c65b5e01a97c2828fca1de9.png)
+
+![](attachments/c14ca53fb76a023d4e73505448c28b04.png)
 
 Since the ID pin is supposed to be tied to its ground pin within the plug, we just connect an LED between VDD → ID pin (=Ground pin) to test the connection.
 
@@ -220,11 +220,43 @@ Since the ID pin is supposed to be tied to its ground pin within the plug, we ju
 
 > The ID pin is also brought out on an exposed pad.
 
-![](attachments/2a6ef750463096ad0f9b045edbfd6c9a.jpg)
-
 ![](attachments/1267dab6a82f90a7f48ecedca57b1e16.png)
 
-### Attributions
+# FAQ
+
+Only one set of the D+ and D- pins light up.
+- The D1+/- and D2+/- pins are not connected together to allows the user to test both sets of pins independently (but requires the user to flip the USB-C side)
+
+OTG Cable test doesn't work? 
+- Make sure the test setup is as shown in the examples
+
+> If the OTG cable has two male plugs, the data lines are not connected between the male ends, only from female → male 1 and female → male 2. The proper way to test will require the OTG adapter plus a normal USB cable. 
+
+With one end plugged in, when I touch the other cable plug to the receptacle the GND (and sometimes Rd) LEDs light up.
+- This happens because the tester first checks for VBUS=+Vsupply, and next checks for Ground=0V. If GND=0V it waits 300ms for the plug to "seat" before running through the other tests. But since the receptacle chassis and plug sheath are connected to GND, if you touch the plug to the receptacle it will read GND as 0V and proceed with the other tests. In the USB C<>B case, the Rd test will run if the CC pins aren't connected through on both sides, so it will also test once this contact is made.
+
+
+# Notable Documentation
+
+The USB-C Type Spec provides the Rp and Rd requirements for legacy cables.
+
+For example, Type-C to 2.0 Type A:
+![](attachments/d223d66e6a67bd730108012adc0fb498.png)
+
+USB Type-C Spec R2.3 - October 2023.pdf
+> tl;dr any legacy cable assembly that **sources** power to a Type C connector must use the default 56K pullup (note this is for both 3.1 and 2.0 versions, since the power negotiation didn't come along until later)
+![](attachments/9fd7738410a75168d8c71c19dc0f99f2.png)
+
+Note the A5 CC pin and the B5 VCONN pin are **not** connected internally. This means it is up to the hardware developer to implement orientation detection on the C-receptacle side. 
+
+And here is for the Type-C to 2.0 Micro-B:
+![](attachments/4ba527f38e640f4a4831fc4404161d29.png) ^dzdzs5
+
+# Improvements
+- USB C<> Micro/Mini B D+/D- LED pair is dependent on C side orientation - make it more user friendly by only lighting up the bottom 2.0 row
+- Low power
+
+# Attributions
 **Icons**
 - Fedora Hat by Sanjib Biswas from [vecteezy](https://www.vecteezy.com/png/24758745-fedora-hat-transparent-background) -  <a href="https://www.vecteezy.com/free-png/silhouette">Silhouette PNGs by Vecteezy</a>
 - tip by Hothouse Design from <a href="https://thenounproject.com/browse/icons/term/tip/" target="_blank" title="tip Icons">Noun Project</a> (CC BY 3.0)
@@ -233,4 +265,4 @@ Since the ID pin is supposed to be tied to its ground pin within the plug, we ju
 **Inspired By**
 - https://github.com/petl/USB-C-cable-tester-C2C-caberQU
 - https://github.com/alvarop/usb_c_cable_tester
-- https://github.com/aroerina/LimePulse_USB_cable_checker/tree/master - mostly ripped off the hardware design from this one, heh -- although I will open source my firmware.
+- https://github.com/aroerina/LimePulse_USB_cable_checker/ - original inspiration for the design from its professional quality layout
