@@ -3,9 +3,9 @@
 ~38-04-usb-sleuth.kicad_sch.lck
 
 # Folders
-src/
-!/src/01-blinky-STM32-HAL
-!/src/02-cc-orientation
+scr/
+!src/scr/*.ioc
+!src/src/Core
 99-Notes-Screenshots/
 
 # Cache things
