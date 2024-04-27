@@ -10512,7 +10512,7 @@
   (gr_text "(4)" (at 156.718 90.17) (layer "F.SilkS") (tstamp b8c00918-cad4-43c4-a7b3-81576edcedf0)
     (effects (font (size 0.8 0.8) (thickness 0.15)))
   )
-  (gr_text "3.1" (at 143.7132 93.9038) (layer "F.SilkS") (tstamp ba059783-2c72-4ba7-9e4d-e29c6ed080d4)
+  (gr_text "3.2" (at 143.7132 93.9038) (layer "F.SilkS") (tstamp ba059783-2c72-4ba7-9e4d-e29c6ed080d4)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text "D+" (at 152.7125 106.872) (layer "F.SilkS") (tstamp c47e3118-eb77-42ba-8f48-8e29bcc4311c)

@@ -3,12 +3,14 @@
 ~38-04-usb-sleuth.kicad_sch.lck
 
 # Folders
-scr/
-!src/scr/*.ioc
-!src/src/Core
 99-Notes-Screenshots/
+src/archive
+src/src/Debug
+src/src/.settings
 
 # Cache things
 .DS_Store
 fp-info-cache
 fp-lib-table
+
+# Build Artifacts
