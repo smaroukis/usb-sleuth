@@ -1,3 +1,5 @@
+See [this README](/README-downloading-firmware.md) for usage of the STM32CubeIDE to flash firmware on the device. 
+
 ## Overview
 
 The device tests for continuity and internal resistors within various USB Cables and exposes some pins for multimeter testing. The project is a hardware fork of [aroerina/LimePulse](https://github.com/aroerina/LimePulse_USB_cable_checker/) that I decided to reverse engineer and write the firmware for.
