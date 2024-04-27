@@ -7,13 +7,13 @@ First, make sure the project has these files otherwise STM32CubeIDE won't have t
 - .ioc file
 ![](attachments/12a23c9a285e1b0db0b344e08e6fe9de.png)
 
-Then import the file `File > Import > Projects from Folder or Archive`
+Then import the project as  `File > Import > Projects from Folder or Archive`
 
 
 ![](attachments/a4ed56e054d821a229f5d3cb17cb25a0.png)
 ![](attachments/1f590cb8b3262f73dec52e8a5b6e9160.png)
 
-Select the file and make sure it has the checkbox checked in the form field for the project and click `Finish` to import the project
+Select the project root and make sure the following dialogue has the checkbox checked in the form field for the project and click `Finish` to import the project
 
 ![](attachments/0b93b173b6ad62440f674de0c17ec51b.png)
 
@@ -26,7 +26,7 @@ You should now see the project in the sidebar as e.g. `38-04-usb-sleuth (in src)
 Click on the project and then see if you can build it:
 ![](attachments/e55aec405d73f69e787cfa3a0cbacf1f.png)
 
-Likely issues could be missing driver dependencies or other source/header files missing. Drivers should be in `src/Drivers` 
+Note: Build issues could be missing driver dependencies or other source/header files missing, or a bad configuration of the Includes paths. HAL drivers should be in `src/Drivers`.
 
 To flash the firmware right click on the project and go to `Run As > STM32 C/C++ Application`
 
